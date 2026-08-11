@@ -1,0 +1,93 @@
+[
+  {
+    "class_id": "boolean-precedence",
+    "item_id": "boolean-precedence-reports",
+    "kind": "mutant",
+    "line": 25,
+    "source_name": "reports"
+  },
+  {
+    "class_id": "broad-except",
+    "item_id": "broad-except-loans",
+    "kind": "mutant",
+    "line": 33,
+    "source_name": "loans"
+  },
+  {
+    "class_id": null,
+    "item_id": "clean-catalog",
+    "kind": "clean",
+    "line": null,
+    "source_name": "catalog"
+  },
+  {
+    "class_id": null,
+    "item_id": "clean-loans",
+    "kind": "clean",
+    "line": null,
+    "source_name": "loans"
+  },
+  {
+    "class_id": null,
+    "item_id": "clean-reports",
+    "kind": "clean",
+    "line": null,
+    "source_name": "reports"
+  },
+  {
+    "class_id": "encoding-drop",
+    "item_id": "encoding-drop-reports",
+    "kind": "mutant",
+    "line": 30,
+    "source_name": "reports"
+  },
+  {
+    "class_id": "is-vs-equals",
+    "item_id": "is-vs-equals-catalog",
+    "kind": "mutant",
+    "line": 56,
+    "source_name": "catalog"
+  },
+  {
+    "class_id": "mutable-default",
+    "item_id": "mutable-default-catalog",
+    "kind": "mutant",
+    "line": 20,
+    "source_name": "catalog"
+  },
+  {
+    "class_id": "off-by-one-slice",
+    "item_id": "off-by-one-slice-catalog",
+    "kind": "mutant",
+    "line": 49,
+    "source_name": "catalog"
+  },
+  {
+    "class_id": "unsorted-iteration",
+    "item_id": "unsorted-iteration-catalog",
+    "kind": "mutant",
+    "line": 46,
+    "source_name": "catalog"
+  },
+  {
+    "class_id": "unsorted-iteration",
+    "item_id": "unsorted-iteration-reports",
+    "kind": "mutant",
+    "line": 17,
+    "source_name": "reports"
+  },
+  {
+    "class_id": "validation-boundary",
+    "item_id": "validation-boundary-catalog",
+    "kind": "mutant",
+    "line": 25,
+    "source_name": "catalog"
+  },
+  {
+    "class_id": "wrong-variable",
+    "item_id": "wrong-variable-loans",
+    "kind": "mutant",
+    "line": 52,
+    "source_name": "loans"
+  }
+]

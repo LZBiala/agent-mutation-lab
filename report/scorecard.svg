@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="422" viewBox="0 0 760 422" font-family="monospace" font-size="12">
+<rect width="760" height="422" fill="#ffffff"/>
+<text x="240" y="22" font-size="14" fill="#111111">scorecard — planted defects found per class (rule-based reviewer)</text>
+<text x="240" y="40" fill="#6b7280">HIT = planted class within ±2 lines of the planted line</text>
+<text x="230" y="75" text-anchor="end" fill="#111111">boolean-precedence</text>
+<rect x="240" y="62" width="490" height="16" fill="#f1f5f9" stroke="#e5e7eb"/>
+<text x="736" y="75" fill="#111111">0/1</text>
+<text x="230" y="105" text-anchor="end" fill="#111111">broad-except</text>
+<rect x="240" y="92" width="490" height="16" fill="#f1f5f9" stroke="#e5e7eb"/>
+<rect x="240" y="92" width="490.0" height="16" fill="#2563eb"/>
+<text x="736" y="105" fill="#111111">1/1</text>
+<text x="230" y="135" text-anchor="end" fill="#111111">encoding-drop</text>
+<rect x="240" y="122" width="490" height="16" fill="#f1f5f9" stroke="#e5e7eb"/>
+<rect x="240" y="122" width="490.0" height="16" fill="#2563eb"/>
+<text x="736" y="135" fill="#111111">1/1</text>
+<text x="230" y="165" text-anchor="end" fill="#111111">is-vs-equals</text>
+<rect x="240" y="152" width="490" height="16" fill="#f1f5f9" stroke="#e5e7eb"/>
+<rect x="240" y="152" width="490.0" height="16" fill="#2563eb"/>
+<text x="736" y="165" fill="#111111">1/1</text>
+<text x="230" y="195" text-anchor="end" fill="#111111">mutable-default</text>
+<rect x="240" y="182" width="490" height="16" fill="#f1f5f9" stroke="#e5e7eb"/>
+<rect x="240" y="182" width="490.0" height="16" fill="#2563eb"/>
+<text x="736" y="195" fill="#111111">1/1</text>
+<text x="230" y="225" text-anchor="end" fill="#111111">off-by-one-slice</text>
+<rect x="240" y="212" width="490" height="16" fill="#f1f5f9" stroke="#e5e7eb"/>
+<rect x="240" y="212" width="490.0" height="16" fill="#2563eb"/>
+<text x="736" y="225" fill="#111111">1/1</text>
+<text x="230" y="255" text-anchor="end" fill="#111111">unsorted-iteration</text>
+<rect x="240" y="242" width="490" height="16" fill="#f1f5f9" stroke="#e5e7eb"/>
+<rect x="240" y="242" width="490.0" height="16" fill="#2563eb"/>
+<text x="736" y="255" fill="#111111">2/2</text>
+<text x="230" y="285" text-anchor="end" fill="#111111">validation-boundary</text>
+<rect x="240" y="272" width="490" height="16" fill="#f1f5f9" stroke="#e5e7eb"/>
+<rect x="240" y="272" width="490.0" height="16" fill="#2563eb"/>
+<text x="736" y="285" fill="#111111">1/1</text>
+<text x="230" y="315" text-anchor="end" fill="#111111">wrong-variable</text>
+<rect x="240" y="302" width="490" height="16" fill="#f1f5f9" stroke="#e5e7eb"/>
+<rect x="240" y="302" width="490.0" height="16" fill="#2563eb"/>
+<text x="736" y="315" fill="#111111">1/1</text>
+<text x="240" y="350" fill="#059669" font-weight="bold">false-alarm arm: 0 finding(s) on 3 byte-identical clean control files</text>
+<text x="240" y="370" fill="#991b1b">rule-based reviewer — harness conformance, not any model's catch rate</text>
+<text x="240" y="390" fill="#6b7280">the red row is a DELIBERATE blind spot — a scorecard that cannot show a miss teaches nothing</text>
+</svg>

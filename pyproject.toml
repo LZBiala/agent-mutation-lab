@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mutationlab"
+version = "1.0.0"
+description = "Mutation testing where the subject under test is an AI code reviewer: plant one known defect from a documented incident class, mix in byte-identical clean files, and score whether the reviewer finds that defect at that line - with a false-alarm arm so crying wolf scores zero. Every published number regenerates in CI with zero API keys."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "LZ Biala" }]
+# Runtime is stdlib-only by design.
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
