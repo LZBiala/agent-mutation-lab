@@ -1,0 +1,11 @@
+# tooling caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+
+# NOTE: wiki/, runs/, report/, and metrics.jsonl are COMMITTED on purpose —
+# they are golden outputs; CI regenerates them and fails the build on any diff.

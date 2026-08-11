@@ -1,0 +1,4 @@
+# Everything in this repo is text with LF endings, on every OS.
+# The CI drift gate (`git diff --exit-code` after regenerating all artifacts)
+# only works if Windows and Linux runners agree on newlines byte-for-byte.
+* text eol=lf
