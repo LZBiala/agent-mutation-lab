@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>agent-mutation-lab — test the tester: mutation testing for AI code reviewers</title>
+<style>
+  :root {
+    --ink: #111827; --muted: #6b7280; --bg: #ffffff; --panel: #f8fafc;
+    --line: #e5e7eb; --blue: #2563eb; --red: #dc2626; --green: #059669;
+    --amber: #b45309; --term-bg: #0f172a; --term-ink: #e2e8f0;
+    --term-dim: #94a3b8; --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body { background: var(--bg); color: var(--ink); line-height: 1.6;
+    font-family: ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif; }
+  code, pre, .term { font-family: ui-monospace, "Cascadia Code", Consolas, monospace; }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 20px; }
+  header.hero { padding: 56px 0 40px; border-bottom: 1px solid var(--line); }
+  .hero h1 { font-size: 2rem; letter-spacing: -0.02em; }
+  .hero h1 span { color: var(--blue); }
+  .hero p.tag { font-size: 1.12rem; color: var(--muted); max-width: 46em; margin-top: 10px; }
+  .badge { display: inline-block; margin-top: 18px; padding: 8px 14px;
+    background: #ecfdf5; color: var(--green); border: 1px solid #a7f3d0;
+    border-radius: 999px; font-size: 0.85rem; font-weight: 600; }
+  nav.chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 18px 0; }
+  nav.chips a { text-decoration: none; color: var(--ink); background: var(--panel);
+    border: 1px solid var(--line); padding: 6px 14px; border-radius: 999px; font-size: 0.88rem; }
+  nav.chips a:hover { border-color: var(--blue); color: var(--blue); }
+  section { padding: 44px 0; border-bottom: 1px solid var(--line); }
+  section h2 { font-size: 1.45rem; margin-bottom: 6px; }
+  section p.lead { color: var(--muted); margin-bottom: 22px; max-width: 52em; }
+  .recipe { background: var(--panel); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 22px 24px; max-width: 52em; font-size: 1.05rem; }
+  .recipe b { color: var(--blue); }
+  .loop { display: flex; flex-wrap: wrap; gap: 10px; }
+  .stage { flex: 1 1 150px; background: var(--panel); border: 1.5px solid var(--line);
+    border-radius: var(--radius); padding: 14px; cursor: pointer; text-align: left;
+    font: inherit; color: inherit; transition: border-color .15s, transform .15s; }
+  .stage:hover { transform: translateY(-2px); }
+  .stage.active { border-color: var(--blue); background: #eff6ff; }
+  .stage .num { font-size: 0.72rem; font-weight: 700; color: var(--blue); letter-spacing: 0.08em; }
+  .stage h3 { font-size: 0.98rem; margin: 2px 0 4px; }
+  .stage p { font-size: 0.8rem; color: var(--muted); line-height: 1.45; }
+  .stage-detail { margin-top: 16px; background: var(--term-bg); color: var(--term-ink);
+    border-radius: var(--radius); padding: 18px 20px; font-size: 0.88rem; }
+  .stage-detail .lbl { color: var(--term-dim); font-size: 0.75rem; letter-spacing: 0.06em; }
+  .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+  .defect { background: var(--panel); border: 1.5px solid var(--line); border-radius: var(--radius);
+    padding: 12px 14px; cursor: pointer; text-align: left; font: inherit; color: inherit; }
+  .defect:hover { border-color: var(--blue); }
+  .defect.active { border-color: var(--blue); background: #eff6ff; }
+  .defect.blind { border-style: dashed; }
+  .defect code { font-size: 0.8rem; color: var(--blue); }
+  .defect p { font-size: 0.76rem; color: var(--muted); margin-top: 4px; }
+  .diffbox { margin-top: 16px; background: var(--term-bg); border-radius: var(--radius);
+    padding: 18px 20px; font-size: 0.85rem; overflow-x: auto; }
+  .diffbox .del { color: #f87171; display: block; white-space: pre; }
+  .diffbox .add { color: #34d399; display: block; white-space: pre; }
+  .diffbox .story { color: var(--term-dim); margin-top: 12px; display: block; font-family: inherit;
+    font-size: 0.85rem; line-height: 1.6; }
+  .player { display: grid; grid-template-columns: 1.25fr 1fr; gap: 16px; }
+  @media (max-width: 760px) { .player { grid-template-columns: 1fr; } }
+  .term { background: var(--term-bg); color: var(--term-ink); border-radius: var(--radius);
+    padding: 16px 18px; min-height: 300px; font-size: 0.82rem; line-height: 1.7;
+    overflow-x: auto; white-space: pre-wrap; word-break: break-word; }
+  .term .dim { color: var(--term-dim); }
+  .term .hit { color: #34d399; }
+  .term .miss { color: #f87171; font-weight: 700; }
+  .term .cleanok { color: #60a5fa; }
+  .explain { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 18px 20px; font-size: 0.92rem; }
+  .explain .step-name { font-weight: 700; color: var(--blue); font-size: 0.8rem; letter-spacing: 0.06em; }
+  .explain h3 { margin: 4px 0 8px; font-size: 1.05rem; }
+  .controls { display: flex; gap: 8px; margin-top: 14px; align-items: center; flex-wrap: wrap; }
+  .controls button { font: inherit; padding: 8px 18px; border-radius: 8px;
+    border: 1px solid var(--line); background: var(--bg); cursor: pointer; font-weight: 600; }
+  .controls button.primary { background: var(--blue); color: #fff; border-color: var(--blue); }
+  .controls button:disabled { opacity: 0.4; cursor: default; }
+  .controls .where { color: var(--muted); font-size: 0.85rem; margin-left: auto; }
+  .quotenote { font-size: 0.8rem; color: var(--muted); margin-top: 10px; }
+  .chart { margin-top: 8px; text-align: center; }
+  .chart img { max-width: 100%; border: 1px solid var(--line); border-radius: var(--radius); }
+  .chart p { font-size: 0.8rem; color: var(--muted); margin-top: 6px; }
+  .honest { background: #fffbeb; border: 1px solid #fde68a; border-radius: var(--radius);
+    padding: 22px 24px; max-width: 56em; }
+  .honest h3 { color: var(--amber); font-size: 1rem; margin-bottom: 8px; }
+  .honest p { font-size: 0.92rem; }
+  .howto pre { background: var(--term-bg); color: var(--term-ink); padding: 10px 14px;
+    border-radius: 8px; margin-top: 8px; font-size: 0.82rem; overflow-x: auto; }
+  footer { padding: 34px 0 60px; color: var(--muted); font-size: 0.85rem; }
+  a { color: var(--blue); }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <h1><span>agent-mutation-lab</span> — test the tester</h1>
+    <p class="tag">Mutation testing where the subject under test is an <b>AI code
+    reviewer</b>: plant one known defect, mix in byte-identical clean files, and score
+    the reviewer on finding <i>that</i> defect at <i>that</i> line — where crying wolf
+    scores zero.</p>
+    <div class="badge">✓ every number on this page regenerates in CI with zero API keys — if a claim drifts, the build fails</div>
+    <nav class="chips">
+      <a href="#idea">The idea</a>
+      <a href="#pipeline">The pipeline</a>
+      <a href="#defects">The defect pack</a>
+      <a href="#verdicts">A real run</a>
+      <a href="#scorecard">The scorecard</a>
+      <a href="#not">What it does NOT show</a>
+    </nav>
+  </div>
+</header>
+
+<section id="idea">
+  <div class="wrap">
+    <h2>The idea in 30 seconds</h2>
+    <div class="recipe">
+      You don't find out whether your <b>smoke alarm</b> works by waiting for a fire.
+      You light a controlled puff of smoke and check the alarm rings — and, just as
+      important, you check it stays <i>quiet</i> on a normal day, because an alarm that
+      screams at everything is as useless as one that never goes off. This lab does that
+      for AI code reviewers.
+    </div>
+    <p class="lead" style="margin-top:14px">Mutation testing is a classical technique,
+    decades old, normally aimed at test suites. The only new move: the thing being
+    tested here is the <b>reviewer</b>.</p>
+  </div>
+</section>
+
+<section id="pipeline">
+  <div class="wrap">
+    <h2>The pipeline</h2>
+    <p class="lead">Five beats, every run. Click a stage.</p>
+    <div class="loop" id="loopRow"></div>
+    <div class="stage-detail" id="stageDetail"></div>
+  </div>
+</section>
+
+<section id="defects">
+  <div class="wrap">
+    <h2>The defect pack — 9 classes, each a documented incident pattern</h2>
+    <p class="lead">Click a class to see the one-line edit that plants it. Each diff
+    below is the actual mutation the engine performs (pinned to the code by tests).
+    The dashed card is the <b>deliberate blind spot</b>.</p>
+    <div class="gallery" id="gallery"></div>
+    <div class="diffbox" id="diffBox"></div>
+  </div>
+</section>
+
+<section id="verdicts">
+  <div class="wrap">
+    <h2>A real run, replayed</h2>
+    <p class="lead">These verdicts are quoted verbatim from the committed
+    <code>runs/verdicts.md</code>, which CI regenerates on every push. Watch the clean
+    controls stay clean, the hits land on their lines — and the one deliberate miss.</p>
+    <div class="player">
+      <div class="term" id="termOut"></div>
+      <div>
+        <div class="explain" id="explainBox"></div>
+        <div class="controls">
+          <button id="btnPrev" type="button">← Back</button>
+          <button id="btnNext" type="button" class="primary">Next →</button>
+          <button id="btnReset" type="button">Restart</button>
+          <span class="where" id="whereAmI"></span>
+        </div>
+        <p class="quotenote">Verbatim from <code>runs/verdicts.md</code>, condensed between beats.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="scorecard">
+  <div class="wrap">
+    <h2>The scorecard — with its caveats welded on</h2>
+    <div class="chart">
+      <img src="../report/scorecard.svg" alt="per-class scorecard bars with the deliberate miss row in red"
+           onerror="this.parentElement.querySelector('p').textContent='Chart: see report/scorecard.svg in the repository.'; this.remove()">
+      <p>The disclaimer lives <i>inside</i> the SVG legend, so it survives screenshots:
+      “rule-based reviewer — harness conformance, not any model's catch rate”.</p>
+    </div>
+    <p class="lead" style="margin-top:16px">The headline numbers, from the committed
+    metrics (pinned by tests): <b>9/10</b> planted defects flagged at the planted line,
+    <b>0</b> findings on <b>3</b> byte-identical clean controls, and one deliberate
+    miss: <b>boolean-precedence</b>, which ships with no detection rule — because a
+    demo that scores 100% can't even show you what a miss looks like.</p>
+    <div class="howto">
+      <pre>git clone https://github.com/LZBiala/agent-mutation-lab
+cd agent-mutation-lab
+pip install -e .          # stdlib-only runtime
+python -m mutationlab demo</pre>
+    </div>
+  </div>
+</section>
+
+<section id="not">
+  <div class="wrap">
+    <h2>What this does NOT show</h2>
+    <div class="honest">
+      <h3>Harness conformance is not a catch rate</h3>
+      <p>The bundled reviewer is deterministic pattern rules. Rules that detect defects
+      the same author planted prove exactly one thing: <b>the harness works</b> —
+      defects are real, the sealed key is correct, hits score at the right lines, clean
+      files stay clean. They prove nothing about any AI. A live model reviewing these
+      same batches would be a real measurement — with run-to-run variance, pinned
+      versions, and its own error bars — and those numbers belong to whoever runs them.
+      They will never appear in this repository's README.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    MIT licensed · <a href="https://github.com/LZBiala/agent-mutation-lab">source &amp; README</a> ·
+    this page is a static file in <code>docs/</code> — no build system, no external requests.
+  </div>
+</footer>
+
+<script>
+"use strict";
+/* ---------- pipeline stages ---------- */
+const STAGES = [
+  { k: "PLANT", t: "Plant one defect", d: "A mutator either applies (one focused edit, struck line recorded) or refuses with None — never a silent no-op.",
+    n: "A silently unchanged “mutant” would score the reviewer a MISS on a file with no defect. The refuse-contract is tested against every non-target fixture." },
+  { k: "SEAL", t: "Seal the answer key", d: "Class, file, and line for every item — generated with the batch, never hand-edited.",
+    n: "The key is the ground truth the scorer uses. It contains no source text, so it can't leak hints." },
+  { k: "MIX", t: "Mix in clean controls", d: "Every fixture also enters the batch byte-identical and unmodified, shuffled with a fixed seed.",
+    n: "The false-alarm arm: a reviewer that cries defect at everything scores zero here — the cheapest way to fake 100% recall, closed off." },
+  { k: "REVIEW", t: "Dispatch the reviewer", d: "Any Reviewer implementation sees one file at a time and returns findings: line + class + note.",
+    n: "The shipped reviewer is rule-based and deterministic — it proves the harness. Your live model is the v1.1 seam." },
+  { k: "SCORE", t: "Score against the key", d: "HIT = planted class within ±2 lines. MISS = no matching finding. FALSE ALARM = anything on a clean control.",
+    n: "Flag everything → the clean arm destroys you. Flag nothing → the misses do. The measurement lives between." },
+];
+const loopRow = document.getElementById("loopRow");
+const stageDetail = document.getElementById("stageDetail");
+STAGES.forEach((s, i) => {
+  const b = document.createElement("button");
+  b.className = "stage"; b.type = "button";
+  b.innerHTML = `<div class="num">STEP ${i + 1}</div><h3>${s.k}</h3><p>${s.d}</p>`;
+  b.addEventListener("click", () => selectStage(i));
+  loopRow.appendChild(b);
+});
+function selectStage(i) {
+  [...loopRow.children].forEach((c, j) => c.classList.toggle("active", i === j));
+  stageDetail.innerHTML =
+    `<div class="lbl">WHY IT MATTERS</div><div style="margin-top:6px">${STAGES[i].n}</div>`;
+}
+selectStage(0);
+
+/* ---------- defect gallery (diffs pinned to the engine by tests) ---------- */
+const DEFECTS = [
+  { id: "mutable-default", blurb: "state shared across calls",
+    del: "tags: list[str] | None = None,", add: "tags: list[str] = [],",
+    story: "The list default is created once and shared by every call — records accumulate each other's data under load. Type checkers pass; single-call tests pass." },
+  { id: "broad-except", blurb: "failures masquerade as domain errors",
+    del: "except ValueError as exc:", add: "except Exception as exc:",
+    story: "Every unrelated failure — typos, attribute errors, system errors — now converts into the domain error, hiding the real cause." },
+  { id: "off-by-one-slice", blurb: "one more row than asked",
+    del: "return matches[:limit]", add: "return matches[:limit + 1]",
+    story: "The output LOOKS right at a glance, which is why pagination bugs of exactly this shape ship constantly." },
+  { id: "is-vs-equals", blurb: "identity vs equality",
+    del: "if catalog[title][\"status\"] == \"available\":", add: "if catalog[title][\"status\"] is \"available\":",
+    story: "Works by string-interning accident in tests, fails unpredictably when the value arrives from parsing or I/O." },
+  { id: "encoding-drop", blurb: "works on my machine",
+    del: "with path.open(\"w\", encoding=\"utf-8\", newline=\"\\n\") as fh:", add: "with path.open(\"w\") as fh:",
+    story: "The write now depends on the OS locale — fine on the author's machine, corrupt on the next one." },
+  { id: "unsorted-iteration", blurb: "order-dependent output",
+    del: "for title in sorted(catalog):", add: "for title in catalog:",
+    story: "Output now depends on insertion order — green today, flaky the day the data path changes." },
+  { id: "boolean-precedence", blind: true, blurb: "THE DELIBERATE BLIND SPOT",
+    del: "return is_overdue and (member_active or in_grace)", add: "return is_overdue and member_active or in_grace",
+    story: "Reads correctly aloud — which is why precedence bugs survive review. The bundled reviewer has NO rule for this class, so the scorecard shows a real miss." },
+  { id: "wrong-variable", blurb: "right type, wrong value",
+    del: "    return total_fee", add: "    return days_late",
+    story: "Two ints in scope, the wrong one returned. Type checkers pass, shallow tests pass, the bill is wrong." },
+  { id: "validation-boundary", blurb: "zero sneaks through",
+    del: "if copies < 1:", add: "if copies < 0:",
+    story: "One keystroke loosens the boundary and a zero-copy record exists that nothing downstream expects." },
+];
+const gallery = document.getElementById("gallery");
+const diffBox = document.getElementById("diffBox");
+DEFECTS.forEach((d, i) => {
+  const b = document.createElement("button");
+  b.className = "defect" + (d.blind ? " blind" : ""); b.type = "button";
+  b.innerHTML = `<code>${d.id}</code><p>${d.blurb}</p>`;
+  b.addEventListener("click", () => selectDefect(i));
+  gallery.appendChild(b);
+});
+function selectDefect(i) {
+  [...gallery.children].forEach((c, j) => c.classList.toggle("active", i === j));
+  const d = DEFECTS[i];
+  diffBox.innerHTML =
+    `<span class="del">- ${escapeHtml(d.del)}</span>` +
+    `<span class="add">+ ${escapeHtml(d.add)}</span>` +
+    `<span class="story">${d.story}</span>`;
+}
+selectDefect(0);
+
+/* ---------- verdict replay (verbatim from runs/verdicts.md) ---------- */
+const BEATS = [
+  { c: "cleanok", line: "- clean-catalog: CLEAN-OK", name: "THE CONTROL ARM",
+    h: "A clean file stays clean", e: "This is the byte-identical original. Zero findings — a reviewer that flagged anything here would be scoring false alarms." },
+  { c: "hit", line: "- mutable-default-catalog: HIT at line 20", name: "HIT",
+    h: "The planted bug, found at its line", e: "One line was edited: a list default became shared state. The reviewer named the class within ±2 lines of the plant. That is what a HIT means here — nothing looser." },
+  { c: "hit", line: "- off-by-one-slice-catalog: HIT at line 49", name: "HIT",
+    h: "Off-by-one, caught", e: "The slice returned one more result than the limit. Looks fine at a glance; the harness knows the exact line it planted." },
+  { c: "hit", line: "- wrong-variable-loans: HIT at line 52", name: "HIT",
+    h: "Right type, wrong value — caught", e: "The function returned the day count instead of the fee. The behavioral probe in the test suite proves this one bills wrong: 6 became 3." },
+  { c: "miss", line: "- boolean-precedence-reports: MISS (planted boolean-precedence at line 25)", name: "★ THE MISS",
+    h: "The deliberate blind spot, on camera", e: "The bundled reviewer ships with NO rule for precedence bugs — so the shipped scorecard contains a real miss. A harness that can only show success teaches nothing about failure output." },
+  { c: "cleanok", line: "- clean-reports: CLEAN-OK", name: "CONTROL AGAIN",
+    h: "Still quiet on a normal day", e: "Every fixture appears once, unmodified. The alarm that never rings falsely is half of what's being scored." },
+  { c: "", line: "SCORE: 9/10 planted defects flagged; 0 false alarm(s) on 3 clean controls", name: "THE SCORE",
+    h: "Harness conformance, stated as such", e: "These numbers prove the pipeline: real defects, correct key, line-accurate scoring, silent controls. They are not any model's catch rate — that measurement belongs to whoever brings a live reviewer." },
+];
+const termOut = document.getElementById("termOut");
+const explainBox = document.getElementById("explainBox");
+const whereAmI = document.getElementById("whereAmI");
+const btnPrev = document.getElementById("btnPrev");
+const btnNext = document.getElementById("btnNext");
+const btnReset = document.getElementById("btnReset");
+let pos = 0;
+function render() {
+  let html = '<span class="dim">REVIEWER: MockReviewer — deterministic pattern rules, zero API keys</span>\n';
+  for (let i = 0; i < pos; i++) {
+    const b = BEATS[i];
+    html += (b.c ? `<span class="${b.c}">` : "") + escapeHtml(b.line) + (b.c ? "</span>" : "") + "\n";
+  }
+  termOut.innerHTML = html;
+  if (pos === 0) {
+    explainBox.innerHTML = `<div class="step-name">READY</div><h3>Press Next to replay the run</h3><p>Seven beats: clean controls staying quiet, hits landing on their lines, and the one deliberate miss.</p>`;
+  } else {
+    const b = BEATS[pos - 1];
+    explainBox.innerHTML = `<div class="step-name">${b.name}</div><h3>${b.h}</h3><p>${b.e}</p>`;
+  }
+  whereAmI.textContent = `${pos} / ${BEATS.length}`;
+  btnPrev.disabled = pos === 0;
+  btnNext.disabled = pos === BEATS.length;
+}
+btnNext.addEventListener("click", () => { if (pos < BEATS.length) { pos++; render(); } });
+btnPrev.addEventListener("click", () => { if (pos > 0) { pos--; render(); } });
+btnReset.addEventListener("click", () => { pos = 0; render(); });
+function escapeHtml(s) {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+render();
+</script>
+</body>
+</html>
