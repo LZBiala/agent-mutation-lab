@@ -12,7 +12,6 @@ import json
 import re
 from pathlib import Path
 
-from mutationlab.batch import build_batch
 from mutationlab.defects import BEHAVIORAL_PROBED_CLASSES, MUTATORS, apply
 from mutationlab.reviewer import Finding, Reviewer
 from mutationlab.runner import LINE_TOLERANCE, run_pipeline
