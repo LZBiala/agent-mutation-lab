@@ -7,7 +7,6 @@ spacing, and substring-based keyless checks.
 from __future__ import annotations
 
 import ast
-import inspect
 import json
 import re
 from pathlib import Path
@@ -106,15 +105,14 @@ class TestProbeManifestPinned:
     figure inside the AUTOGEN block. The manifest and the probes must agree."""
 
     def test_manifest_matches_the_actual_probe_methods(self) -> None:
-        from tests.test_engine import TestMutantsAreBehavioral
-
-        probes = [
-            name
-            for name, _member in inspect.getmembers(
-                TestMutantsAreBehavioral, inspect.isfunction
-            )
-            if name.startswith("test_")
-        ]
+        # Read the probe class from source text: 'tests' is not a package, so
+        # importing it works locally but not on CI — a text scan is portable.
+        source = (REPO / "tests" / "test_engine.py").read_text(encoding="utf-8")
+        match = re.search(
+            r"class TestMutantsAreBehavioral:.*?(?=\nclass |\Z)", source, flags=re.S
+        )
+        assert match is not None
+        probes = re.findall(r"def (test_\w+)", match.group(0))
         assert len(probes) == len(BEHAVIORAL_PROBED_CLASSES)
         for class_id in BEHAVIORAL_PROBED_CLASSES:
             slug = class_id.replace("-", "_")
