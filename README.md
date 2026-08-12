@@ -14,6 +14,9 @@ zero.
 > rules: its numbers are harness conformance, never any model's catch rate —
 > see *What this does NOT show*.
 
+**🎛 Interactive walkthrough:** [lzbiala.github.io/agent-mutation-lab/docs](https://lzbiala.github.io/agent-mutation-lab/docs/) —
+click through the pipeline, the defect gallery, and the verdict replay in your browser.
+
 ## The idea in 30 seconds
 
 You don't find out whether your smoke alarm works by waiting for a fire. You
