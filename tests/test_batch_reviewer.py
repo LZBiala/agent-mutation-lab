@@ -28,13 +28,21 @@ class TestBatch:
             assert item.class_id is None and item.line is None
 
     def test_every_applicable_pair_present_exactly_once(self) -> None:
+        from mutationlab.defects import applicable
+
         items = build_batch(FIXTURES)
         ids = [i.item_id for i in items]
         assert len(ids) == len(set(ids))
-        mutants = [i for i in items if i.kind == "mutant"]
-        assert len(mutants) >= 9  # at least one per class
-        classes = {i.class_id for i in mutants}
-        assert classes == {m.class_id for m in MUTATORS}
+        expected_pairs = {
+            (m.class_id, name)
+            for m in MUTATORS
+            for name, text in FIXTURES.items()
+            if applicable(m, text)
+        }
+        actual_pairs = {
+            (i.class_id, i.source_name) for i in items if i.kind == "mutant"
+        }
+        assert actual_pairs == expected_pairs  # the name's promise, exactly
 
     def test_batch_order_is_deterministic(self) -> None:
         a = [i.item_id for i in build_batch(FIXTURES)]

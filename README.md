@@ -33,7 +33,7 @@ for your codebase, and not a claim that rule-based review works. It is an
 false-alarm arm, and a scoring pipeline you can point at any reviewer you
 bring.
 
-## Quickstart (three commands, no keys)
+## Quickstart (no keys)
 
 ```
 git clone https://github.com/LZBiala/agent-mutation-lab
@@ -71,9 +71,23 @@ file that contains no defect.
 - **HIT** — a finding with the planted class within ±2 lines of the planted line.
 - **MISS** — a mutant with no matching finding.
 - **FALSE ALARM** — *any* finding on a byte-identical clean control file.
+- **SPURIOUS** — a finding on a mutant that does not match the planted defect;
+  counted and published, so noise on mutants pays a visible price too.
 
-Flag everything → the false-alarm arm destroys you. Flag nothing → misses do.
-The measurement lives between.
+Flag everything → the false-alarm and spurious counts destroy you. Flag
+nothing → misses do. The measurement lives between.
+
+## Why this matters — the mechanism, labeled
+
+AI reviewers are being wired into pipelines as **gates**: they approve merges,
+triage findings, and block releases. A gate you have never tested with known-bad
+input is an unmeasured gate — you know neither what it catches nor what it
+waves through, and its failure mode is silent. Planting documented defects is
+the cheapest way to buy that measurement: the ground truth is exact (you put
+the bug there), the false-alarm cost is visible (clean controls), and the
+whole thing replays deterministically in CI. This repo measures the harness
+side; pointing it at your live reviewer is the measurement that matters — and
+it belongs to you.
 
 ## Claims, treated like SLOs
 
@@ -86,8 +100,8 @@ typed by hand, and CI fails if regeneration disagrees.
 |---|---|---|---|
 | The harness plants real defects and scores them at the right line | **9/10 planted defects flagged at the planted line (±2), across 9 classes** | every applicable (defect, file) pair injected once; the sealed answer key is generated with the batch; the bundled rule-based reviewer replays in CI | HARNESS CONFORMANCE, not a catch rate — the bundled reviewer is deterministic rules, and its blind spot is deliberate (see next row) |
 | A miss looks like a miss | **missed class(es): boolean-precedence** | the bundled reviewer ships with NO rule for that class, so the scorecard contains a real MISS row | a harness whose demo scores 100% teaches nothing about what failure output looks like; the blind spot is documented in reviewer.py |
-| Crying wolf scores zero | **0 finding(s) on 3 byte-identical clean control files** | every fixture is included unmodified in the batch; any finding on it counts against the reviewer | with a rule-based reviewer this is 0 by construction — the arm exists so that a LIVE reviewer cannot score by flagging everything |
-| The planted defects are behavioral, not cosmetic | **4 classes proven by executable probes** (shared-state leak, broken limit, wrong amount returned, zero admitted by validation) | tests exec the mutated module and drive the bug: pass on clean, misbehave on mutant | the other classes are structural patterns whose harm is documented per class in defects.py rather than executed |
+| Crying wolf scores zero | **0 finding(s) on 3 byte-identical clean control files; 0 spurious finding(s) on mutants** | every fixture is included unmodified in the batch; any finding on it counts against the reviewer, and findings on mutants that do not match the planted defect are counted as spurious | with a rule-based reviewer both are 0 by construction — the arms exist so that a LIVE reviewer cannot score by flagging everything |
+| The planted defects are behavioral, not cosmetic | **4 classes proven by executable probes** (mutable-default, off-by-one-slice, wrong-variable, validation-boundary) | tests exec the mutated module and drive the bug: pass on clean, misbehave on mutant | the other classes are structural patterns whose harm is documented per class in defects.py rather than executed |
 
 <!-- AUTOGEN:END -->
 
@@ -113,7 +127,10 @@ in this README**.
 list[Finding]` with a live model, run the same pipeline, and read your own
 scorecard. Watch for: the false-alarm arm (models love to find *something*),
 line accuracy (±2 is generous), and class confusion (calling a boundary bug a
-style issue is a miss).
+style issue is a miss). Feed your reviewer from `batches/` — the filenames
+are opaque on purpose — and keep `runs/answer-key.json` out of its context:
+it is answer-side material, which is why it does not live in the corpus
+directory.
 
 ## Design notes for engineers
 

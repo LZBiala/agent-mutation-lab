@@ -3,8 +3,8 @@
 <text x="240" y="22" font-size="14" fill="#111111">scorecard — planted defects found per class (rule-based reviewer)</text>
 <text x="240" y="40" fill="#6b7280">HIT = planted class within ±2 lines of the planted line</text>
 <text x="230" y="75" text-anchor="end" fill="#111111">boolean-precedence</text>
-<rect x="240" y="62" width="490" height="16" fill="#f1f5f9" stroke="#e5e7eb"/>
-<text x="736" y="75" fill="#111111">0/1</text>
+<rect x="240" y="62" width="490" height="16" fill="#f1f5f9" stroke="#dc2626"/>
+<text x="736" y="75" fill="#dc2626">0/1</text>
 <text x="230" y="105" text-anchor="end" fill="#111111">broad-except</text>
 <rect x="240" y="92" width="490" height="16" fill="#f1f5f9" stroke="#e5e7eb"/>
 <rect x="240" y="92" width="490.0" height="16" fill="#2563eb"/>

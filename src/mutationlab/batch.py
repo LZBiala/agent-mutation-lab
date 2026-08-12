@@ -5,20 +5,19 @@ rewards a reviewer that cries defect at everything — the cheapest possible
 way to score 100%. Every fixture appears once as a byte-identical CLEAN item,
 and every applicable (mutator, fixture) pair appears once as a mutant.
 
-Order is shuffled with a FIXED seed so the batch is deterministic and the
-reviewer cannot infer kind from position. The answer key is generated with
-the batch and sealed to JSON — never hand-edited.
+On disk, batch files carry OPAQUE names (item-01.py, item-02.py, ...): a
+reviewable corpus whose filenames named the planted class would hand any
+file-fed reviewer the answers. The id→file mapping lives only in the answer
+key, which is sealed OUTSIDE the reviewable directory — generated with the
+batch, never hand-edited.
 """
 from __future__ import annotations
 
 import json
-import random
 from dataclasses import dataclass
 from pathlib import Path
 
 from mutationlab.defects import MUTATORS, apply
-
-SEED = 20260811
 
 
 @dataclass(frozen=True)
@@ -59,22 +58,27 @@ def build_batch(fixtures: dict[str, str]) -> list[BatchItem]:
                     text=mutant.text,
                 )
             )
-    rng = random.Random(SEED)  # noqa: S311 — fixed seed IS the reproducibility requirement
-    rng.shuffle(items)
     return items
 
 
+def batch_file_name(index: int) -> str:
+    """Opaque on-disk name for the item at `index` of the id-sorted order."""
+    return f"item-{index + 1:02d}.py"
+
+
 def seal_key(items: list[BatchItem], path: Path) -> None:
-    """The answer key: everything but the text, sorted by item id."""
+    """The answer key: everything but the text, sorted by item id, including
+    the opaque on-disk file each item was written to."""
     records = [
         {
             "item_id": item.item_id,
+            "file": batch_file_name(index),
             "source_name": item.source_name,
             "kind": item.kind,
             "class_id": item.class_id,
             "line": item.line,
         }
-        for item in sorted(items, key=lambda i: i.item_id)
+        for index, item in enumerate(sorted(items, key=lambda i: i.item_id))
     ]
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8", newline="\n") as fh:

@@ -7,4 +7,4 @@
 {"class_id": "unsorted-iteration", "hits": 2, "kind": "class", "misses": 0, "mutants": 2}
 {"class_id": "validation-boundary", "hits": 1, "kind": "class", "misses": 0, "mutants": 1}
 {"class_id": "wrong-variable", "hits": 1, "kind": "class", "misses": 0, "mutants": 1}
-{"clean_files": 3, "false_alarms": 0, "kind": "summary", "reviewer": "MockReviewer", "total_hits": 9, "total_mutants": 10}
+{"clean_files": 3, "false_alarms": 0, "kind": "summary", "reviewer": "MockReviewer", "spurious_on_mutants": 0, "total_hits": 9, "total_mutants": 10}

@@ -84,3 +84,10 @@ class TestHeadlineNumbers:
         assert f"<b>{s['total_hits']}/{s['total_mutants']}</b>" in HTML
         assert f"<b>{s['false_alarms']}</b> findings on <b>{s['clean_files']}</b>" in HTML
         assert "boolean-precedence" in HTML
+
+    def test_hand_typed_counts_match_the_arrays(self) -> None:
+        n_stages = len(re.findall(r'\{ k: "', HTML))
+        n_beats = len(re.findall(r'\bline: "', HTML))
+        words = {5: "Five", 6: "Six", 7: "Seven", 8: "Eight", 9: "Nine"}
+        assert f"{words[n_stages]} beats" in HTML
+        assert f"{words[n_beats]} beats" in HTML

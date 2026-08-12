@@ -7,5 +7,5 @@ __pycache__/
 build/
 dist/
 
-# NOTE: wiki/, runs/, report/, and metrics.jsonl are COMMITTED on purpose —
+# NOTE: batches/, runs/, report/, and metrics.jsonl are COMMITTED on purpose —
 # they are golden outputs; CI regenerates them and fails the build on any diff.

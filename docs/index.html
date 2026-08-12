@@ -101,7 +101,7 @@
     reviewer</b>: plant one known defect, mix in byte-identical clean files, and score
     the reviewer on finding <i>that</i> defect at <i>that</i> line — where crying wolf
     scores zero.</p>
-    <div class="badge">✓ every number on this page regenerates in CI with zero API keys — if a claim drifts, the build fails</div>
+    <div class="badge">✓ every measured number on this page regenerates in CI with zero API keys — if a claim drifts, the build fails</div>
     <nav class="chips">
       <a href="#idea">The idea</a>
       <a href="#pipeline">The pipeline</a>
@@ -306,7 +306,7 @@ const BEATS = [
   { c: "hit", line: "- off-by-one-slice-catalog: HIT at line 49", name: "HIT",
     h: "Off-by-one, caught", e: "The slice returned one more result than the limit. Looks fine at a glance; the harness knows the exact line it planted." },
   { c: "hit", line: "- wrong-variable-loans: HIT at line 52", name: "HIT",
-    h: "Right type, wrong value — caught", e: "The function returned the day count instead of the fee. The behavioral probe in the test suite proves this one bills wrong: 6 became 3." },
+    h: "Right type, wrong value — caught", e: "The function returned the day count instead of the fee. The behavioral probe in the test suite executes the mutant and proves it bills the wrong amount." },
   { c: "miss", line: "- boolean-precedence-reports: MISS (planted boolean-precedence at line 25)", name: "★ THE MISS",
     h: "The deliberate blind spot, on camera", e: "The bundled reviewer ships with NO rule for precedence bugs — so the shipped scorecard contains a real miss. A harness that can only show success teaches nothing about failure output." },
   { c: "cleanok", line: "- clean-reports: CLEAN-OK", name: "CONTROL AGAIN",
@@ -322,7 +322,7 @@ const btnNext = document.getElementById("btnNext");
 const btnReset = document.getElementById("btnReset");
 let pos = 0;
 function render() {
-  let html = '<span class="dim">REVIEWER: MockReviewer — deterministic pattern rules, zero API keys</span>\n';
+  let html = '<span class="dim">REVIEWER: MockReviewer — deterministic pattern rules, zero API keys; results are harness conformance, not any model’s catch rate</span>\n';
   for (let i = 0; i < pos; i++) {
     const b = BEATS[i];
     html += (b.c ? `<span class="${b.c}">` : "") + escapeHtml(b.line) + (b.c ? "</span>" : "") + "\n";

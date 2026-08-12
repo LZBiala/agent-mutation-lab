@@ -8,6 +8,9 @@ import json
 from dataclasses import dataclass
 from pathlib import Path
 
+from mutationlab.defects import BEHAVIORAL_PROBED_CLASSES
+from mutationlab.runner import LINE_TOLERANCE
+
 AUTOGEN_BEGIN = "<!-- AUTOGEN:BEGIN — rendered by report.py from metrics.jsonl; do not edit by hand -->"
 AUTOGEN_END = "<!-- AUTOGEN:END -->"
 DISCLAIMER = "rule-based reviewer — harness conformance, not any model's catch rate"
@@ -53,29 +56,35 @@ def render_scorecard_svg(metrics: Metrics) -> str:
         f'<text x="{left}" y="22" font-size="14" fill="#111111">'
         "scorecard — planted defects found per class (rule-based reviewer)</text>",
         f'<text x="{left}" y="40" fill="#6b7280">'
-        "HIT = planted class within ±2 lines of the planted line</text>",
+        f"HIT = planted class within ±{LINE_TOLERANCE} lines of the planted line</text>",
     ]
     for i, row in enumerate(rows):
         y = top + i * row_h
         mutants = int(row["mutants"])  # type: ignore[arg-type]
         hits = int(row["hits"])  # type: ignore[arg-type]
         frac = hits / mutants if mutants else 0.0
-        color = _BLUE if hits == mutants else _RED
+        full = hits == mutants
+        color = _BLUE if full else _RED
         parts.append(
             f'<text x="{left - 10}" y="{y + 19}" text-anchor="end" fill="#111111">'
             f"{row['class_id']}</text>"
         )
+        # A miss row must LOOK like a miss: red outline and red count, even
+        # (especially) when the bar is empty — 'the red row' has to be true
+        # as rendered, not only as intended.
+        outline = "#e5e7eb" if full else _RED
         parts.append(
             f'<rect x="{left}" y="{y + 6}" width="{bar_w}" height="16" '
-            f'fill="#f1f5f9" stroke="#e5e7eb"/>'
+            f'fill="#f1f5f9" stroke="{outline}"/>'
         )
         if frac > 0:
             parts.append(
                 f'<rect x="{left}" y="{y + 6}" width="{bar_w * frac:.1f}" height="16" '
                 f'fill="{color}"/>'
             )
+        count_color = "#111111" if full else _RED
         parts.append(
-            f'<text x="{left + bar_w + 6}" y="{y + 19}" fill="#111111">'
+            f'<text x="{left + bar_w + 6}" y="{y + 19}" fill="{count_color}">'
             f"{hits}/{mutants}</text>"
         )
     clean_files = int(metrics.summary["clean_files"])  # type: ignore[arg-type]
@@ -103,6 +112,7 @@ def render_claims(metrics: Metrics) -> str:
     total_hits = int(metrics.summary["total_hits"])  # type: ignore[arg-type]
     clean_files = int(metrics.summary["clean_files"])  # type: ignore[arg-type]
     false_alarms = int(metrics.summary["false_alarms"])  # type: ignore[arg-type]
+    spurious = int(metrics.summary.get("spurious_on_mutants", 0))  # type: ignore[union-attr]
     n_classes = len(metrics.per_class)
     missed = [r for r in metrics.per_class if int(r["hits"]) < int(r["mutants"])]  # type: ignore[arg-type]
     missed_names = ", ".join(str(r["class_id"]) for r in missed) or "none"
@@ -113,7 +123,8 @@ def render_claims(metrics: Metrics) -> str:
         (
             "| The harness plants real defects and scores them at the right line "
             f"| **{total_hits}/{total_mutants} planted defects flagged at the "
-            f"planted line (±2), across {n_classes} classes** | every applicable "
+            f"planted line (±{LINE_TOLERANCE}), across {n_classes} classes** "
+            "| every applicable "
             "(defect, file) pair injected once; the sealed answer key is generated "
             "with the batch; the bundled rule-based reviewer replays in CI | "
             "HARNESS CONFORMANCE, not a catch rate — the bundled reviewer is "
@@ -130,15 +141,17 @@ def render_claims(metrics: Metrics) -> str:
         (
             "| Crying wolf scores zero "
             f"| **{false_alarms} finding(s) on {clean_files} byte-identical clean "
-            "control files** | every fixture is included unmodified in the batch; "
-            "any finding on it counts against the reviewer | with a rule-based "
-            "reviewer this is 0 by construction — the arm exists so that a LIVE "
+            f"control files; {spurious} spurious finding(s) on mutants** | every "
+            "fixture is included unmodified in the batch; any finding on it counts "
+            "against the reviewer, and findings on mutants that do not match the "
+            "planted defect are counted as spurious | with a rule-based "
+            "reviewer both are 0 by construction — the arms exist so that a LIVE "
             "reviewer cannot score by flagging everything |"
         ),
         (
             "| The planted defects are behavioral, not cosmetic "
-            "| **4 classes proven by executable probes** (shared-state leak, "
-            "broken limit, wrong amount returned, zero admitted by validation) | "
+            f"| **{len(BEHAVIORAL_PROBED_CLASSES)} classes proven by executable "
+            f"probes** ({', '.join(BEHAVIORAL_PROBED_CLASSES)}) | "
             "tests exec the mutated module and drive the bug: pass on clean, "
             "misbehave on mutant | the other classes are structural patterns "
             "whose harm is documented per class in defects.py rather than "

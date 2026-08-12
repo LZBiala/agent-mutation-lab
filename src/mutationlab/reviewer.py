@@ -38,8 +38,11 @@ class Reviewer(ABC):
     def review(self, source_name: str, text: str) -> list[Finding]: ...
 
 
-# Detection rules are written from the DEFECT side (what bad code looks
-# like), independent of the injection patterns (what edit produces it).
+# Detection rules aim at the DEFECT side (what bad code looks like) — though
+# for value-level defects (wrong-variable, validation-boundary) the bad code
+# IS the injected output, so those rules necessarily mirror the injection.
+# The README's "What this does NOT show" section owns this circularity out
+# loud: these rules prove the harness, nothing more.
 _RULES: tuple[tuple[str, str, str], ...] = (
     (
         "mutable-default",

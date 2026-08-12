@@ -1,6 +1,7 @@
 [
   {
     "class_id": "boolean-precedence",
+    "file": "item-01.py",
     "item_id": "boolean-precedence-reports",
     "kind": "mutant",
     "line": 25,
@@ -8,6 +9,7 @@
   },
   {
     "class_id": "broad-except",
+    "file": "item-02.py",
     "item_id": "broad-except-loans",
     "kind": "mutant",
     "line": 33,
@@ -15,6 +17,7 @@
   },
   {
     "class_id": null,
+    "file": "item-03.py",
     "item_id": "clean-catalog",
     "kind": "clean",
     "line": null,
@@ -22,6 +25,7 @@
   },
   {
     "class_id": null,
+    "file": "item-04.py",
     "item_id": "clean-loans",
     "kind": "clean",
     "line": null,
@@ -29,6 +33,7 @@
   },
   {
     "class_id": null,
+    "file": "item-05.py",
     "item_id": "clean-reports",
     "kind": "clean",
     "line": null,
@@ -36,6 +41,7 @@
   },
   {
     "class_id": "encoding-drop",
+    "file": "item-06.py",
     "item_id": "encoding-drop-reports",
     "kind": "mutant",
     "line": 30,
@@ -43,6 +49,7 @@
   },
   {
     "class_id": "is-vs-equals",
+    "file": "item-07.py",
     "item_id": "is-vs-equals-catalog",
     "kind": "mutant",
     "line": 56,
@@ -50,6 +57,7 @@
   },
   {
     "class_id": "mutable-default",
+    "file": "item-08.py",
     "item_id": "mutable-default-catalog",
     "kind": "mutant",
     "line": 20,
@@ -57,6 +65,7 @@
   },
   {
     "class_id": "off-by-one-slice",
+    "file": "item-09.py",
     "item_id": "off-by-one-slice-catalog",
     "kind": "mutant",
     "line": 49,
@@ -64,6 +73,7 @@
   },
   {
     "class_id": "unsorted-iteration",
+    "file": "item-10.py",
     "item_id": "unsorted-iteration-catalog",
     "kind": "mutant",
     "line": 46,
@@ -71,6 +81,7 @@
   },
   {
     "class_id": "unsorted-iteration",
+    "file": "item-11.py",
     "item_id": "unsorted-iteration-reports",
     "kind": "mutant",
     "line": 17,
@@ -78,6 +89,7 @@
   },
   {
     "class_id": "validation-boundary",
+    "file": "item-12.py",
     "item_id": "validation-boundary-catalog",
     "kind": "mutant",
     "line": 25,
@@ -85,6 +97,7 @@
   },
   {
     "class_id": "wrong-variable",
+    "file": "item-13.py",
     "item_id": "wrong-variable-loans",
     "kind": "mutant",
     "line": 52,

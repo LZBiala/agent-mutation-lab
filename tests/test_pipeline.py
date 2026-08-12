@@ -69,7 +69,7 @@ class TestPipeline:
 
     def test_answer_key_never_contains_source_text(self, demo_run: Path) -> None:
         records = json.loads(
-            (demo_run / "batches" / "answer-key.json").read_text("utf-8")
+            (demo_run / "runs" / "answer-key.json").read_text("utf-8")
         )
         assert records and all("text" not in r for r in records)
 
@@ -145,7 +145,7 @@ class TestInProcessCoverage:
         monkeypatch.setattr(main_mod, "REPORT_DIR", tmp_path / "report")
         monkeypatch.setattr(main_mod, "METRICS", tmp_path / "metrics.jsonl")
         assert main_mod.demo(quiet=True) == 0
-        for name in ("metrics.jsonl", "report/scorecard.svg", "batches/answer-key.json"):
+        for name in ("metrics.jsonl", "report/scorecard.svg", "runs/answer-key.json"):
             assert (tmp_path / name).exists(), name
 
 

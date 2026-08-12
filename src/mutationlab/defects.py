@@ -127,7 +127,7 @@ MUTATORS: tuple[Mutator, ...] = (
             "fee. Type checkers pass, tests that only check 'a number came "
             "back' pass, customers get billed wrong."
         ),
-        pattern=r"    return total_fee",
+        pattern=r"    return total_fee\b",
         replacement="    return days_late",
     ),
     Mutator(
@@ -142,6 +142,24 @@ MUTATORS: tuple[Mutator, ...] = (
         replacement="if copies < 0:",
     ),
 )
+
+
+# Classes whose planted bugs are PROVEN behavioral by executable probes in the
+# test suite (tests exec the mutant and drive the misbehavior). The claims
+# table derives its count from this manifest, and a test pins the manifest to
+# the actual probe methods — so the figure cannot drift from the proofs.
+BEHAVIORAL_PROBED_CLASSES: tuple[str, ...] = (
+    "mutable-default",
+    "off-by-one-slice",
+    "wrong-variable",
+    "validation-boundary",
+)
+
+# Fixture-pack contract (enforced by tests, documented here for pack authors):
+# every pattern occurrence in a fixture must sit on a CODE line (not a
+# docstring/comment), and no plant site may have another same-class pattern
+# instance within the scorer's line tolerance — otherwise a hit could be
+# credited to the wrong occurrence.
 
 
 def apply(mutator: Mutator, source_name: str, source_text: str) -> Mutant | None:

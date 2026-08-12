@@ -91,8 +91,8 @@ def demo(quiet: bool) -> int:
     )
     emit("")
     emit("Look around:")
-    emit("  batches/           the reviewable corpus + answer-key.json (sealed with the batch)")
-    emit("  runs/verdicts.md   every verdict: HIT / MISS / CLEAN-OK")
+    emit("  batches/           the reviewable corpus — opaque filenames, no answers in names")
+    emit("  runs/              verdicts.md (every HIT / MISS / CLEAN-OK) + answer-key.json (answer-side, kept out of the corpus)")
     emit("  report/scorecard.svg  per-class bars (the red row is the deliberate blind spot)")
     emit("  metrics.jsonl      every number the README publishes, regenerated just now")
     return 0
