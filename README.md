@@ -169,6 +169,27 @@ CI (Windows + Linux, pinned Python, zero secrets): pytest → hygiene gate →
 full regeneration → `git diff --exit-code`. **The committed artifacts ARE the
 claims; CI proves they regenerate.**
 
+## Field notes (2026)
+
+Evaluation practice in 2026 moved toward stress-testing the evaluators
+themselves — judge/reviewer meta-evaluation. This harness does that with
+planted defects and byte-identical clean controls: ground-truth controls that
+score false alarms as failures, which perturbation-only protocols cannot. In
+current vocabulary: a behavioral defect-detection eval with known-ground-truth
+controls. Further reading on failure attribution: ["Model or
+Harness?"](https://arxiv.org/abs/2607.28802).
+
+## Roadmap
+
+Both items are future work — neither has been run.
+
+- **Harness-vs-model ablation:** rerun the suite across 2 models x 2 harness
+  configurations and attribute failures using the model-or-harness taxonomy —
+  tests whether findings generalize or are harness-specific.
+- **k-run live-model variance study:** to be published as a separate, clearly
+  labeled study — never inside the CI-gated claims above, per the standing
+  rule that live-model results stay out of drift-gated sections.
+
 ## License
 
 MIT.
