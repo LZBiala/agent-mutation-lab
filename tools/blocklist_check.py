@@ -68,7 +68,19 @@ GENERIC_PATTERNS = re.compile(
 
 TOKEN_RE = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
 
-SKIP_DIRS = {".git", "__pycache__", ".pytest_cache", ".ruff_cache", "node_modules"}
+# Untracked tool directories, skipped for the same reason .git is: nothing in
+# them is ever published, so scanning them can only produce failures that CI
+# (which checks out a clean tree) will never see. Every entry here must also be
+# in .gitignore — a scanned-and-skipped directory that DOES get committed would
+# be a hole in the gate.
+SKIP_DIRS = {
+    ".git",
+    "__pycache__",
+    ".pytest_cache",
+    ".ruff_cache",
+    ".superpowers",
+    "node_modules",
+}
 # This file necessarily contains the generic pattern literals it searches for;
 # everything private in it is hashed, so self-skipping hides nothing.
 SKIP_FILES = {"tools/blocklist_check.py"}

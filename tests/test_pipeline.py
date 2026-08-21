@@ -144,8 +144,20 @@ class TestInProcessCoverage:
         monkeypatch.setattr(main_mod, "RUNS_DIR", tmp_path / "runs")
         monkeypatch.setattr(main_mod, "REPORT_DIR", tmp_path / "report")
         monkeypatch.setattr(main_mod, "METRICS", tmp_path / "metrics.jsonl")
+        # EVERY output constant must be redirected, not most of them: demo()
+        # deletes and rewrites each one, so a single unpatched path makes this
+        # test scribble on the real repo's committed artifacts mid-suite — and
+        # a later test that reads those artifacts would then be grading this
+        # test's output instead of what is committed.
+        monkeypatch.setattr(main_mod, "METRICS_TTC", tmp_path / "metrics-ttc.jsonl")
         assert main_mod.demo(quiet=True) == 0
-        for name in ("metrics.jsonl", "report/scorecard.svg", "runs/answer-key.json"):
+        for name in (
+            "metrics.jsonl",
+            "metrics-ttc.jsonl",
+            "report/scorecard.svg",
+            "report/ttc-curve.svg",
+            "runs/answer-key.json",
+        ):
             assert (tmp_path / name).exists(), name
 
 

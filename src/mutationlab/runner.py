@@ -23,10 +23,31 @@ from typing import Callable
 
 from mutationlab.batch import batch_file_name, build_batch, seal_key
 from mutationlab.defects import EngineError
-from mutationlab.reviewer import Reviewer
+from mutationlab.reviewer import Finding, Reviewer
 
 Emit = Callable[[str], None]
 LINE_TOLERANCE = 2
+
+
+def match_findings(
+    class_id: str, line: int, findings: list[Finding]
+) -> tuple[tuple[Finding, ...], tuple[Finding, ...]]:
+    """Split a review into (matching the planted defect, spurious).
+
+    HIT semantics live here and ONLY here. The pipeline and the inference-
+    compute experiment both score through this function, so a panel of nine
+    reviewers is judged by exactly the rule a single reviewer is judged by —
+    two definitions of "hit" would make the two studies incomparable while
+    both looked right.
+    """
+    matching: list[Finding] = []
+    spurious: list[Finding] = []
+    for finding in findings:
+        if finding.class_id == class_id and abs(finding.line - line) <= LINE_TOLERANCE:
+            matching.append(finding)
+        else:
+            spurious.append(finding)
+    return tuple(matching), tuple(spurious)
 
 
 @dataclass(frozen=True)
@@ -123,14 +144,9 @@ def run_pipeline(
             raise EngineError(f"mutant item {item.item_id!r} lacks class/line")
         tally = tallies.setdefault(item.class_id, _Tally())
         tally.mutants += 1
-        matching = [
-            f
-            for f in findings
-            if f.class_id == item.class_id and abs(f.line - item.line) <= LINE_TOLERANCE
-        ]
-        spurious_on_mutants += len(findings) - len(matching)
-        matched = bool(matching)
-        if matched:
+        matching, spurious = match_findings(item.class_id, item.line, findings)
+        spurious_on_mutants += len(spurious)
+        if matching:
             tally.hits += 1
             verdict = f"HIT at line {item.line}"
         else:
