@@ -36,6 +36,17 @@ for your codebase, and not a claim that rule-based review works. It is an
 false-alarm arm, and a scoring pipeline you can point at any reviewer you
 bring.
 
+## In plain English
+
+The smoke-alarm drill above, scored: 9 out of 10 planted bugs were flagged at
+the right line, and the untouched files drew zero false alarms — an alarm that
+shrieks at burnt toast fails this test. One bug type has no detection rule on
+purpose, so the scorecard shows a real miss in red. And in the voting study
+below, asking nine independent copies of the reviewer instead of one raised
+the catch rate by roughly twenty points — while nine copies sharing the same
+mistakes gained exactly nothing. None of these numbers comes from a live AI;
+they prove the measuring instrument, not any model.
+
 ## Quickstart (no keys)
 
 ```
@@ -92,7 +103,7 @@ whole thing replays deterministically in CI. This repo measures the harness
 side; pointing it at your live reviewer is the measurement that matters — and
 it belongs to you.
 
-## Claims, treated like SLOs
+## Claims the build defends
 
 Rendered from `metrics.jsonl` by `report.py` — no measured number below is
 typed by hand, and CI fails if regeneration disagrees.
@@ -110,7 +121,7 @@ typed by hand, and CI fails if regeneration disagrees.
 
 Regenerate everything yourself: `python -m mutationlab demo --quiet && git diff`.
 
-## Experiment: test-time compute (self-consistency)
+## Experiment: does asking nine times beat asking once? (test-time compute)
 
 ### The pillar in 30 seconds
 
