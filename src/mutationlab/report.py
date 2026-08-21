@@ -1,5 +1,5 @@
 """Single source of truth for every published number: the scorecard SVG, the
-inference-compute curve, and both README AUTOGEN blocks — all rendered from
+inference-compute curve, and both README AUTOGEN blocks - all rendered from
 the committed metrics files. CI regenerates and `git diff --exit-code` fails
 the build on any drift.
 
@@ -16,11 +16,11 @@ from pathlib import Path
 from mutationlab.defects import BEHAVIORAL_PROBED_CLASSES
 from mutationlab.runner import LINE_TOLERANCE
 
-AUTOGEN_BEGIN = "<!-- AUTOGEN:BEGIN — rendered by report.py from metrics.jsonl; do not edit by hand -->"
+AUTOGEN_BEGIN = "<!-- AUTOGEN:BEGIN - rendered by report.py from metrics.jsonl; do not edit by hand -->"
 AUTOGEN_END = "<!-- AUTOGEN:END -->"
-TTC_BEGIN = "<!-- AUTOGEN:TTC:BEGIN — rendered by report.py from metrics-ttc.jsonl; do not edit by hand -->"
+TTC_BEGIN = "<!-- AUTOGEN:TTC:BEGIN - rendered by report.py from metrics-ttc.jsonl; do not edit by hand -->"
 TTC_END = "<!-- AUTOGEN:TTC:END -->"
-DISCLAIMER = "rule-based reviewer — harness conformance, not any model's catch rate"
+DISCLAIMER = "rule-based reviewer - harness conformance, not any model's catch rate"
 
 _BLUE = "#2563eb"
 _RED = "#dc2626"
@@ -74,7 +74,7 @@ def render_scorecard_svg(metrics: Metrics) -> str:
         f'viewBox="0 0 {width} {height}" font-family="monospace" font-size="12">',
         f'<rect width="{width}" height="{height}" fill="#ffffff"/>',
         f'<text x="{left}" y="22" font-size="14" fill="#111111">'
-        "scorecard — planted defects found per class (rule-based reviewer)</text>",
+        "scorecard - planted defects found per class (rule-based reviewer)</text>",
         f'<text x="{left}" y="40" fill="#6b7280">'
         f"HIT = planted class within ±{LINE_TOLERANCE} lines of the planted line</text>",
     ]
@@ -90,7 +90,7 @@ def render_scorecard_svg(metrics: Metrics) -> str:
             f"{row['class_id']}</text>"
         )
         # A miss row must LOOK like a miss: red outline and red count, even
-        # (especially) when the bar is empty — 'the red row' has to be true
+        # (especially) when the bar is empty - 'the red row' has to be true
         # as rendered, not only as intended.
         outline = "#e5e7eb" if full else _RED
         parts.append(
@@ -120,7 +120,7 @@ def render_scorecard_svg(metrics: Metrics) -> str:
     )
     parts.append(
         f'<text x="{left}" y="{base_y + 40}" fill="#6b7280">'
-        "the red row is a DELIBERATE blind spot — a scorecard that cannot show "
+        "the red row is a DELIBERATE blind spot - a scorecard that cannot show "
         "a miss teaches nothing</text>"
     )
     parts.append("</svg>")
@@ -147,7 +147,7 @@ def render_claims(metrics: Metrics) -> str:
             "| every applicable "
             "(defect, file) pair injected once; the sealed answer key is generated "
             "with the batch; the bundled rule-based reviewer replays in CI | "
-            "HARNESS CONFORMANCE, not a catch rate — the bundled reviewer is "
+            "HARNESS CONFORMANCE, not a catch rate - the bundled reviewer is "
             "deterministic rules, and its blind spot is deliberate (see next row) |"
         ),
         (
@@ -165,7 +165,7 @@ def render_claims(metrics: Metrics) -> str:
             "fixture is included unmodified in the batch; any finding on it counts "
             "against the reviewer, and findings on mutants that do not match the "
             "planted defect are counted as spurious | with a rule-based "
-            "reviewer both are 0 by construction — the arms exist so that a LIVE "
+            "reviewer both are 0 by construction - the arms exist so that a LIVE "
             "reviewer cannot score by flagging everything |"
         ),
         (
@@ -259,7 +259,7 @@ def render_ttc_table(metrics: TtcMetrics) -> str:
     lines = [
         f"**Apparatus.** {trials} pre-registered trials over the same batch: "
         f"{mutants} mutants ({detectable} of them detectable, spread across "
-        f"{classes} classes — one class plants twice) and {clean} byte-identical "
+        f"{classes} classes - one class plants twice) and {clean} byte-identical "
         f"clean controls. Members miss a real finding at rate "
         f"{_f(params, 'miss_rate')} (arm A3: {_f(params, 'miss_rate_below')}) and "
         f"invent a bogus one at rate {_f(params, 'fa_rate')} per file, clean or "
@@ -268,7 +268,7 @@ def render_ttc_table(metrics: TtcMetrics) -> str:
         f"reviews and {trials} x {clean} = {trials * clean} clean reviews. "
         f"Vote key: (line, class), majority of k, k odd.",
         "",
-        "**The curve — detectable catch rate.** The prediction column is the "
+        "**The curve - detectable catch rate.** The prediction column is the "
         "exact binomial tail for this vote rule, valid only where member "
         "accuracy exceeds one half.",
         "",
@@ -285,7 +285,7 @@ def render_ttc_table(metrics: TtcMetrics) -> str:
         lines.append(f"| **{k}** |{cells} {prediction} |")
 
     # Diminishing returns, DERIVED. This ratio is a measured number, so it is
-    # rendered from the artifact rather than typed into the prose around it —
+    # rendered from the artifact rather than typed into the prose around it -
     # a hand-typed ratio drifts the moment the batch or the seeds change, and
     # nothing in CI would catch the contradiction.
     def catch(arm: str, k: int) -> float:
@@ -299,7 +299,7 @@ def render_ttc_table(metrics: TtcMetrics) -> str:
             f"**Diminishing returns.** The first two extra reviews "
             f"(k={ks[0]} to k={ks[1]}) buy **{first_step:+.4f}** detectable "
             f"catch. The last two (k={ks[-2]} to k={ks[-1]}) buy "
-            f"**{last_step:+.4f}** — **{last_step / first_step:.2f}x** the "
+            f"**{last_step:+.4f}** - **{last_step / first_step:.2f}x** the "
             f"gain, at exactly the same marginal cost of two more reviews.",
         ]
     )
@@ -307,7 +307,7 @@ def render_ttc_table(metrics: TtcMetrics) -> str:
     lines.extend(
         [
             "",
-            "**The cost — noise the panel pays for.** A false alarm is any "
+            "**The cost - noise the panel pays for.** A false alarm is any "
             "finding on a clean control; a spurious finding is one on a mutant "
             "that does not match the planted defect.",
             "",
@@ -328,7 +328,7 @@ def render_ttc_table(metrics: TtcMetrics) -> str:
     lines.extend(
         [
             "",
-            f"**The wall — class(es) with no detection rule: {wall_names}.** No "
+            f"**The wall - class(es) with no detection rule: {wall_names}.** No "
             "member can find them, so no majority can either. Zero by "
             "construction, published at every k in every arm.",
             "",
@@ -364,7 +364,7 @@ def _wall_hits(metrics: TtcMetrics, arm: str, k: int, class_id: str) -> int:
 def render_ttc_curve_svg(metrics: TtcMetrics) -> str:
     """The k-curve: the win, the placebo, the amplified error, and the wall.
 
-    Every coordinate is emitted at fixed precision — a float whose repr drifts
+    Every coordinate is emitted at fixed precision - a float whose repr drifts
     by one digit between platforms would fail the drift gate for a reason that
     has nothing to do with the study.
     """
@@ -392,9 +392,9 @@ def render_ttc_curve_svg(metrics: TtcMetrics) -> str:
         f'viewBox="0 0 {width} {height}" font-family="monospace" font-size="12">',
         f'<rect width="{width}" height="{height}" fill="#ffffff"/>',
         f'<text x="{left}" y="24" font-size="14" fill="{_INK}">'
-        "inference-compute study — detectable catch rate vs reviews per file</text>",
+        "inference-compute study - detectable catch rate vs reviews per file</text>",
         f'<text x="{left}" y="42" fill="{_MUTED}">'
-        "same batch, same seeds, three arms — the only difference is where the "
+        "same batch, same seeds, three arms - the only difference is where the "
         "errors come from</text>",
     ]
     for tick in (0.0, 0.25, 0.5, 0.75, 1.0):
@@ -450,7 +450,7 @@ def render_ttc_curve_svg(metrics: TtcMetrics) -> str:
     )
     parts.append(
         f'<text x="{left + 6}" y="{float(wall_y) - 8:.1f}" fill="{_RED}">'
-        "THE WALL — rule-less class, 0 hits at every k, in every arm</text>"
+        "THE WALL - rule-less class, 0 hits at every k, in every arm</text>"
     )
 
     # Labels are split into two explicit lines rather than wrapped by word
@@ -491,7 +491,7 @@ def render_ttc_curve_svg(metrics: TtcMetrics) -> str:
         (_RED, "a mechanism reproduced, never any model measured"),
         (
             _MUTED,
-            "the prediction is valid only above one-half member accuracy — "
+            "the prediction is valid only above one-half member accuracy - "
             "A3 is the regime below it",
         ),
     )

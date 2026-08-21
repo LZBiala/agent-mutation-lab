@@ -16,7 +16,7 @@ REPO = Path(__file__).resolve().parents[1]
 def load(name: str) -> dict[str, object]:
     text = (REPO / "fixtures" / "catalog_app" / f"{name}.py").read_text("utf-8")
     namespace: dict[str, object] = {}
-    exec(compile(text, f"<{name}>", "exec"), namespace)  # noqa: S102 — executing our own fixture under test
+    exec(compile(text, f"<{name}>", "exec"), namespace)  # noqa: S102 - executing our own fixture under test
     return namespace
 
 

@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="760" height="464" viewBox="0 0 760 464" font-family="monospace" font-size="12">
 <rect width="760" height="464" fill="#ffffff"/>
-<text x="70" y="24" font-size="14" fill="#111111">inference-compute study — detectable catch rate vs reviews per file</text>
-<text x="70" y="42" fill="#6b7280">same batch, same seeds, three arms — the only difference is where the errors come from</text>
+<text x="70" y="24" font-size="14" fill="#111111">inference-compute study - detectable catch rate vs reviews per file</text>
+<text x="70" y="42" fill="#6b7280">same batch, same seeds, three arms - the only difference is where the errors come from</text>
 <line x1="70" y1="350.0" x2="540" y2="350.0" stroke="#e5e7eb"/>
 <text x="62" y="354.0" text-anchor="end" fill="#6b7280">0.00</text>
 <line x1="70" y1="279.0" x2="540" y2="279.0" stroke="#e5e7eb"/>
@@ -18,31 +18,31 @@
 <text x="422.5" y="372" text-anchor="middle" fill="#111111">k=7</text>
 <text x="540.0" y="372" text-anchor="middle" fill="#111111">k=9</text>
 <text x="305.0" y="392" text-anchor="middle" fill="#6b7280">reviews per file</text>
-<polyline points="70.0,150.1 187.5,150.1 305.0,150.1 422.5,150.1 540.0,150.1" fill="none" stroke="#b45309" stroke-width="2" stroke-dasharray="7 5"/>
-<circle cx="70.0" cy="150.1" r="4.5" fill="#b45309"/>
-<circle cx="187.5" cy="150.1" r="4.5" fill="#b45309"/>
-<circle cx="305.0" cy="150.1" r="4.5" fill="#b45309"/>
-<circle cx="422.5" cy="150.1" r="4.5" fill="#b45309"/>
-<circle cx="540.0" cy="150.1" r="4.5" fill="#b45309"/>
-<polyline points="70.0,252.2 187.5,273.9 305.0,284.4 422.5,295.9 540.0,303.8" fill="none" stroke="#7c3aed" stroke-width="2"/>
-<circle cx="70.0" cy="252.2" r="4.5" fill="#7c3aed"/>
-<circle cx="187.5" cy="273.9" r="4.5" fill="#7c3aed"/>
-<circle cx="305.0" cy="284.4" r="4.5" fill="#7c3aed"/>
-<circle cx="422.5" cy="295.9" r="4.5" fill="#7c3aed"/>
-<circle cx="540.0" cy="303.8" r="4.5" fill="#7c3aed"/>
-<polyline points="70.0,150.1 187.5,126.6 305.0,113.8 422.5,103.5 540.0,93.6" fill="none" stroke="#2563eb" stroke-width="2"/>
-<circle cx="70.0" cy="150.1" r="4.5" fill="#2563eb"/>
-<circle cx="187.5" cy="126.6" r="4.5" fill="#2563eb"/>
-<circle cx="305.0" cy="113.8" r="4.5" fill="#2563eb"/>
-<circle cx="422.5" cy="103.5" r="4.5" fill="#2563eb"/>
-<circle cx="540.0" cy="93.6" r="4.5" fill="#2563eb"/>
+<polyline points="70.0,153.6 187.5,153.6 305.0,153.6 422.5,153.6 540.0,153.6" fill="none" stroke="#b45309" stroke-width="2" stroke-dasharray="7 5"/>
+<circle cx="70.0" cy="153.6" r="4.5" fill="#b45309"/>
+<circle cx="187.5" cy="153.6" r="4.5" fill="#b45309"/>
+<circle cx="305.0" cy="153.6" r="4.5" fill="#b45309"/>
+<circle cx="422.5" cy="153.6" r="4.5" fill="#b45309"/>
+<circle cx="540.0" cy="153.6" r="4.5" fill="#b45309"/>
+<polyline points="70.0,255.5 187.5,270.5 305.0,282.2 422.5,290.2 540.0,299.4" fill="none" stroke="#7c3aed" stroke-width="2"/>
+<circle cx="70.0" cy="255.5" r="4.5" fill="#7c3aed"/>
+<circle cx="187.5" cy="270.5" r="4.5" fill="#7c3aed"/>
+<circle cx="305.0" cy="282.2" r="4.5" fill="#7c3aed"/>
+<circle cx="422.5" cy="290.2" r="4.5" fill="#7c3aed"/>
+<circle cx="540.0" cy="299.4" r="4.5" fill="#7c3aed"/>
+<polyline points="70.0,153.6 187.5,125.0 305.0,108.6 422.5,100.4 540.0,94.2" fill="none" stroke="#2563eb" stroke-width="2"/>
+<circle cx="70.0" cy="153.6" r="4.5" fill="#2563eb"/>
+<circle cx="187.5" cy="125.0" r="4.5" fill="#2563eb"/>
+<circle cx="305.0" cy="108.6" r="4.5" fill="#2563eb"/>
+<circle cx="422.5" cy="100.4" r="4.5" fill="#2563eb"/>
+<circle cx="540.0" cy="94.2" r="4.5" fill="#2563eb"/>
 <circle cx="70.0" cy="151.2" r="7" fill="none" stroke="#2563eb" stroke-width="1.5"/>
 <circle cx="187.5" cy="127.3" r="7" fill="none" stroke="#2563eb" stroke-width="1.5"/>
 <circle cx="305.0" cy="112.3" r="7" fill="none" stroke="#2563eb" stroke-width="1.5"/>
 <circle cx="422.5" cy="101.8" r="7" fill="none" stroke="#2563eb" stroke-width="1.5"/>
 <circle cx="540.0" cy="94.1" r="7" fill="none" stroke="#2563eb" stroke-width="1.5"/>
 <line x1="70" y1="350.0" x2="540" y2="350.0" stroke="#dc2626" stroke-width="3"/>
-<text x="76" y="342.0" fill="#dc2626">THE WALL — rule-less class, 0 hits at every k, in every arm</text>
+<text x="76" y="342.0" fill="#dc2626">THE WALL - rule-less class, 0 hits at every k, in every arm</text>
 <text x="560" y="60" fill="#111111">legend</text>
 <line x1="560" y1="80" x2="576" y2="80" stroke="#2563eb" stroke-width="3"/>
 <text x="584" y="84" fill="#111111" font-size="11">A1 independent</text>
@@ -61,5 +61,5 @@
 <text x="584" y="233" fill="#6b7280" font-size="11">(no detection rule)</text>
 <text x="70" y="414" fill="#dc2626">synthetic Bernoulli noise, independent BY CONSTRUCTION</text>
 <text x="70" y="432" fill="#dc2626">a mechanism reproduced, never any model measured</text>
-<text x="70" y="450" fill="#6b7280">the prediction is valid only above one-half member accuracy — A3 is the regime below it</text>
+<text x="70" y="450" fill="#6b7280">the prediction is valid only above one-half member accuracy - A3 is the regime below it</text>
 </svg>

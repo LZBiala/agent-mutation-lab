@@ -1,6 +1,6 @@
 """The panel: k reviewers vote, and the arithmetic they are measured against.
 
-This is the whole test-time-compute move in one file — instead of asking once,
+This is the whole test-time-compute move in one file - instead of asking once,
 ask k times and keep what a majority agrees on. Two design decisions carry the
 result:
 
@@ -10,12 +10,12 @@ not. Including the note would measure prose similarity instead of agreement.
 The surviving note is taken from the lowest member index so the output is a
 pure function of the ballots, not of dict ordering.
 
-K IS ODD, ALWAYS. An even panel can tie, and a tie has no majority — rather
+K IS ODD, ALWAYS. An even panel can tie, and a tie has no majority - rather
 than invent a tie-break that no theory covers, even panels are refused.
 
 `condorcet_prediction` is the exact binomial tail the empirical curve is
 compared against. It is arithmetic about THIS harness's vote rule, not a
-claim about any model. Its famous direction — more voters, better answer —
+claim about any model. Its famous direction - more voters, better answer -
 holds only where per-member accuracy exceeds one half. At exactly one half the
 panel is a fixed point, and below it the same formula runs backwards: voting
 amplifies error instead of averaging it away.

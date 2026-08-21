@@ -1,14 +1,14 @@
 """Batch builder: mutants + byte-identical clean controls + a sealed key.
 
 The clean control arm is the point: scoring recall without a false-alarm arm
-rewards a reviewer that cries defect at everything — the cheapest possible
+rewards a reviewer that cries defect at everything - the cheapest possible
 way to score 100%. Every fixture appears once as a byte-identical CLEAN item,
 and every applicable (mutator, fixture) pair appears once as a mutant.
 
 On disk, batch files carry OPAQUE names (item-01.py, item-02.py, ...): a
 reviewable corpus whose filenames named the planted class would hand any
 file-fed reviewer the answers. The id→file mapping lives only in the answer
-key, which is sealed OUTSIDE the reviewable directory — generated with the
+key, which is sealed OUTSIDE the reviewable directory - generated with the
 batch, never hand-edited.
 """
 from __future__ import annotations

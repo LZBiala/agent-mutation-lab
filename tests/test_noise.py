@@ -13,8 +13,8 @@ cannot idly hallucinate a class it has no detector for, and letting the noise
 draw the rule-less class would let luck alone produce a "hit" on the very
 blind spot the wall exhibit is measuring.
 
-The empirical-rate tests use a REPLAY stand-in for the base reviewer — the
-same findings MockReviewer produces, precomputed once — because these tests
+The empirical-rate tests use a REPLAY stand-in for the base reviewer - the
+same findings MockReviewer produces, precomputed once - because these tests
 draw thousands of streams and the base pass is identical every time.
 """
 from __future__ import annotations
@@ -41,7 +41,7 @@ SEED = "noise-test"
 
 @dataclass(frozen=True)
 class _Replay(Reviewer):
-    """MockReviewer's verdicts, precomputed — same findings, no rescan."""
+    """MockReviewer's verdicts, precomputed - same findings, no rescan."""
 
     by_text: dict[str, list[Finding]] = field(default_factory=dict)
     name: str = "ReplayReviewer"
@@ -81,8 +81,8 @@ class TestDeterminism:
             assert a.review("x", text) == b.review("x", text)
 
     def test_review_order_does_not_change_any_verdict(self) -> None:
-        """The stream is keyed by (run seed, trial, member, file hash) — never
-        by call order — so a shuffled batch yields identical per-file verdicts."""
+        """The stream is keyed by (run seed, trial, member, file hash) - never
+        by call order - so a shuffled batch yields identical per-file verdicts."""
         reviewer = _noisy(MockReviewer(), 2)
         texts = CLEAN_TEXTS + MUTANT_TEXTS
         forward = {t: reviewer.review("x", t) for t in texts}
@@ -121,7 +121,7 @@ class TestNoiseBoundaries:
 
 
 class TestKeyBlindness:
-    """The noise model never sees item kind or the key — so its false-alarm
+    """The noise model never sees item kind or the key - so its false-alarm
     rate must be statistically the same on clean and mutant texts."""
 
     MEMBERS = 400
@@ -154,14 +154,14 @@ class TestKeyBlindness:
 
     def test_invented_findings_only_ever_carry_a_pool_class(self) -> None:
         """The rule-less wall class is not in the pool, so no lucky invented
-        finding can ever score on it — the wall reads zero by construction."""
+        finding can ever score on it - the wall reads zero by construction."""
         base = _replay_base()
         seen: set[str] = set()
         for member in range(200):
             for text in CLEAN_TEXTS + MUTANT_TEXTS:
                 for finding in self._invented(base, member, text):
                     seen.add(finding.class_id)
-        assert seen, "no false alarms fired at all — the rate test is a lie"
+        assert seen, "no false alarms fired at all - the rate test is a lie"
         assert seen <= set(CLASS_POOL), seen - set(CLASS_POOL)
 
     def test_invented_lines_stay_inside_the_file(self) -> None:

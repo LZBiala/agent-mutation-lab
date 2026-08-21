@@ -16,19 +16,19 @@ git diff --exit-code          # any drift between claims and the fresh run fails
 ```
 
 Run all five before opening a PR. CI runs exactly this on Windows and Linux
-with Python 3.12 pinned — byte-identity guarantees are version-scoped, so use
+with Python 3.12 pinned - byte-identity guarantees are version-scoped, so use
 3.12 locally if you touch generated artifacts.
 
 ## What PRs are welcome
 
 - **New defect classes.** Each needs: a documented real-world incident story
   in `defects.py`, a mutator that honors the engine contract (**mutate or
-  refuse, never no-op** — tested against every non-target fixture), and
+  refuse, never no-op** - tested against every non-target fixture), and
   ideally an executable behavioral probe that passes on clean and misbehaves
   on the mutant.
 - **New behavioral probes** for the classes currently proven only by
   documentation.
-- **A second fixture domain** — self-contained, stdlib-only, executable in
+- **A second fixture domain** - self-contained, stdlib-only, executable in
   isolation, boring by design.
 - **Reviewer implementations** against the `reviewer.Reviewer` seam. Keep
   live-model results in your own fork or a separate labeled study; see the
@@ -43,5 +43,5 @@ must pass.
 
 Practical consequences: never hand-edit anything between the `AUTOGEN`
 markers in README.md (CI regenerates those blocks and fails on mismatch), and
-never commit absolute paths or contact addresses — the hygiene gate fails
+never commit absolute paths or contact addresses - the hygiene gate fails
 closed on both.

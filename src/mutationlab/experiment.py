@@ -1,23 +1,23 @@
 """The inference-compute study: spend more reviews per file, measure what it buys.
 
-The move under test is self-consistency — ask k noisy reviewers instead of one
+The move under test is self-consistency - ask k noisy reviewers instead of one
 and keep what a majority agrees on. Three arms run over the SAME batch, the
 same seeds, and the same scoring function the v1.0 pipeline uses, so the only
 thing that varies between them is where the members' errors come from:
 
-  A1 independent   — k members with independent error streams. The winning
+  A1 independent   - k members with independent error streams. The winning
                      exhibit: catch climbs with k, false alarms collapse.
-  A2 correlated    — k seats sharing ONE stream. The placebo: nine times the
+  A2 correlated    - k seats sharing ONE stream. The placebo: nine times the
                      reviews, byte-identical output, exactly zero gain.
                      Independence is the active ingredient, not the count.
-  A3 below-chance  — independent members whose accuracy is under one half.
+  A3 below-chance  - independent members whose accuracy is under one half.
                      Voting AMPLIFIES their error: the same arithmetic that
                      builds the winning curve runs backwards.
 
 And through every arm, at every k: THE WALL. The defect classes the base
 reviewer carries no rule for are derived from its rule table, never listed by
 hand, and scored as their own rows. No member ever finds them, so no majority
-ever does — inference compute multiplies existing capability and cannot
+ever does - inference compute multiplies existing capability and cannot
 manufacture absent capability. Detectable-only catch is therefore published
 separately from overall catch, so the wall never quietly deflates the number
 the Condorcet comparison is made on.
@@ -42,8 +42,8 @@ from mutationlab.runner import LINE_TOLERANCE, match_findings
 
 # --- pre-registered constants (frozen before the first run) -----------------
 RUN_SEED = "ttc-v1"
-MISS_RATE = 0.30  # A1/A2 member accuracy 0.70 — above the Condorcet threshold
-MISS_RATE_BELOW = 0.65  # A3 member accuracy 0.35 — below it, on purpose
+MISS_RATE = 0.30  # A1/A2 member accuracy 0.70 - above the Condorcet threshold
+MISS_RATE_BELOW = 0.65  # A3 member accuracy 0.35 - below it, on purpose
 FA_RATE = 0.10  # key-blind: fires on every file, clean or mutant
 K_VALUES: tuple[int, ...] = (1, 3, 5, 7, 9)
 N_TRIALS = 200  # trial seeds 0..199
@@ -54,7 +54,7 @@ ARM_CORRELATED = "correlated"
 ARM_BELOW_CHANCE = "below-chance"
 ARMS: tuple[str, ...] = (ARM_INDEPENDENT, ARM_CORRELATED, ARM_BELOW_CHANCE)
 
-# Member accuracy per arm — the p the published binomial prediction uses. The
+# Member accuracy per arm - the p the published binomial prediction uses. The
 # correlated arm's members are as good as A1's; only their independence differs,
 # which is exactly the gap the placebo exhibit puts on screen.
 ARM_ACCURACY: dict[str, float] = {
@@ -63,7 +63,7 @@ ARM_ACCURACY: dict[str, float] = {
     ARM_BELOW_CHANCE: 1.0 - MISS_RATE_BELOW,
 }
 
-DECIMALS = 4  # every published float, fixed — byte-stable artifacts
+DECIMALS = 4  # every published float, fixed - byte-stable artifacts
 
 
 def wall_classes() -> tuple[str, ...]:
@@ -82,7 +82,7 @@ class CurvePoint:
     """One published (arm, k) point: catch, false alarms, spurious findings.
 
     Every rate ships with its denominator. `overall_reviews` is that
-    denominator twice over — one review of every mutant per trial — so it
+    denominator twice over - one review of every mutant per trial - so it
     divides both `overall_catch` and `spurious_per_mutant_review`.
     """
 
@@ -127,7 +127,7 @@ class CurvePoint:
 
 @dataclass(frozen=True)
 class WallPoint:
-    """One rule-less class at one (arm, k) — published even though it is zero,
+    """One rule-less class at one (arm, k) - published even though it is zero,
     especially because it is zero."""
 
     arm: str
@@ -171,7 +171,7 @@ class _ReplayReviewer(Reviewer):
     """The base reviewer's verdicts, precomputed per file.
 
     The base pass is identical in all 200 trials, for all 9 members, in all 3
-    arms — running it 70,000 times would only prove that regexes are slow. The
+    arms - running it 70,000 times would only prove that regexes are slow. The
     noise model is what varies, so the base runs once per file and replays.
     """
 
@@ -186,7 +186,7 @@ def build_members(arm: str, trial: int, base: Reviewer) -> tuple[NoisyReviewer, 
     """The panel seats for one arm and one trial, nested by construction.
 
     Seats are built once per trial and sliced per k, so k=3's members are a
-    subset of k=5's — the curve is one panel growing, not five unrelated
+    subset of k=5's - the curve is one panel growing, not five unrelated
     panels, which removes the between-k variance that would otherwise dominate
     a 200-trial study.
 
@@ -269,7 +269,7 @@ def run_experiment(fixtures: dict[str, str]) -> ExperimentResult:
         for trial in range(N_TRIALS):
             members = build_members(arm, trial, base)
             for item in items:
-                # One ballot per seat, cast once and reused at every k — the
+                # One ballot per seat, cast once and reused at every k - the
                 # nesting that makes the five points one growing panel.
                 ballots = [m.review(item.source_name, item.text) for m in members]
                 for k in K_VALUES:

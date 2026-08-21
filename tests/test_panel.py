@@ -2,7 +2,7 @@
 the whole study is compared against.
 
 The vote key is (line, class_id) and NOTHING else. Including the note would
-let two reviewers who found the same defect in different words fail to agree —
+let two reviewers who found the same defect in different words fail to agree -
 the panel would measure prose similarity instead of agreement.
 
 condorcet_prediction is the theoretical curve every empirical point is checked
@@ -26,7 +26,7 @@ from mutationlab.reviewer import Finding, Reviewer
 
 @dataclass(frozen=True)
 class _Fixed(Reviewer):
-    """A reviewer that always returns the same findings — a voting seat."""
+    """A reviewer that always returns the same findings - a voting seat."""
 
     findings: tuple[Finding, ...] = ()
     name: str = "FixedReviewer"
@@ -48,7 +48,7 @@ class TestThreshold:
         assert [majority_threshold(k) for k in (1, 3, 5, 7, 9)] == [1, 2, 3, 4, 5]
 
     def test_even_panels_are_refused(self) -> None:
-        """An even panel can tie, and a tie has no majority — the study only
+        """An even panel can tie, and a tie has no majority - the study only
         ever runs odd k, so the code refuses the ambiguous case outright."""
         for k in (0, 2, 4, 8):
             with pytest.raises(ValueError):
@@ -121,7 +121,7 @@ class TestCondorcetPrediction:
 
     def test_below_one_half_the_curve_runs_backwards(self) -> None:
         """The precondition, asserted rather than assumed: under one-half
-        member accuracy more seats make the panel WORSE — arm A3's regime."""
+        member accuracy more seats make the panel WORSE - arm A3's regime."""
         curve = [condorcet_prediction(k, 0.35) for k in (1, 3, 5, 7, 9)]
         assert curve == sorted(curve, reverse=True)
         assert curve[0] == pytest.approx(0.35)

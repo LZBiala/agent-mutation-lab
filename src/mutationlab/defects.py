@@ -1,5 +1,5 @@
 """The defect pack: nine injectable defect classes, each a documented,
-real-world incident pattern — and the engine that plants exactly one.
+real-world incident pattern - and the engine that plants exactly one.
 
 Contract (enforced by the test suite):
 - A mutator either APPLIES (source differs by one focused edit, struck line
@@ -45,7 +45,7 @@ MUTATORS: tuple[Mutator, ...] = (
         title="Mutable default argument",
         story=(
             "A list default is created once at function definition and shared "
-            "across every call — state leaks between unrelated invocations. "
+            "across every call - state leaks between unrelated invocations. "
             "Classic production symptom: records mysteriously accumulate other "
             "records' data under load."
         ),
@@ -57,8 +57,8 @@ MUTATORS: tuple[Mutator, ...] = (
         title="Over-broad exception handler",
         story=(
             "Widening `except ValueError` to `except Exception` silently "
-            "converts every unrelated failure — typos, attribute errors, "
-            "system errors — into the domain error, hiding the real cause."
+            "converts every unrelated failure - typos, attribute errors, "
+            "system errors - into the domain error, hiding the real cause."
         ),
         pattern=r"except ValueError as exc:",
         replacement="except Exception as exc:",
@@ -90,7 +90,7 @@ MUTATORS: tuple[Mutator, ...] = (
         title="Platform-default file encoding",
         story=(
             "Dropping the explicit encoding makes the write depend on the "
-            "OS locale — the file is fine on the author's machine and "
+            "OS locale - the file is fine on the author's machine and "
             "corrupt on the next one. A canonical works-on-my-machine bug."
         ),
         pattern=r'open\("w", encoding="utf-8", newline="\\n"\)',
@@ -100,7 +100,7 @@ MUTATORS: tuple[Mutator, ...] = (
         class_id="unsorted-iteration",
         title="Order-dependent iteration without sorting",
         story=(
-            "Removing `sorted()` makes output depend on insertion order — "
+            "Removing `sorted()` makes output depend on insertion order - "
             "green today, flaky the day the data path changes. "
             "Nondeterminism bugs are the most expensive class to debug."
         ),
@@ -111,7 +111,7 @@ MUTATORS: tuple[Mutator, ...] = (
         class_id="boolean-precedence",
         title="Dropped parentheses change boolean precedence",
         story=(
-            "`a and (b or c)` is not `a and b or c` — the second notifies "
+            "`a and (b or c)` is not `a and b or c` - the second notifies "
             "everyone in the grace window whether or not they are overdue. "
             "Precedence bugs read correctly aloud, which is why they survive "
             "review."
@@ -123,7 +123,7 @@ MUTATORS: tuple[Mutator, ...] = (
         class_id="wrong-variable",
         title="Returning the wrong same-typed variable",
         story=(
-            "Two ints in scope, one returned — the days count instead of the "
+            "Two ints in scope, one returned - the days count instead of the "
             "fee. Type checkers pass, tests that only check 'a number came "
             "back' pass, customers get billed wrong."
         ),
@@ -147,7 +147,7 @@ MUTATORS: tuple[Mutator, ...] = (
 # Classes whose planted bugs are PROVEN behavioral by executable probes in the
 # test suite (tests exec the mutant and drive the misbehavior). The claims
 # table derives its count from this manifest, and a test pins the manifest to
-# the actual probe methods — so the figure cannot drift from the proofs.
+# the actual probe methods - so the figure cannot drift from the proofs.
 BEHAVIORAL_PROBED_CLASSES: tuple[str, ...] = (
     "mutable-default",
     "off-by-one-slice",
@@ -158,7 +158,7 @@ BEHAVIORAL_PROBED_CLASSES: tuple[str, ...] = (
 # Fixture-pack contract (enforced by tests, documented here for pack authors):
 # every pattern occurrence in a fixture must sit on a CODE line (not a
 # docstring/comment), and no plant site may have another same-class pattern
-# instance within the scorer's line tolerance — otherwise a hit could be
+# instance within the scorer's line tolerance - otherwise a hit could be
 # credited to the wrong occurrence.
 
 
@@ -174,7 +174,7 @@ def apply(mutator: Mutator, source_name: str, source_text: str) -> Mutant | None
     )
     if mutated == source_text:
         raise EngineError(
-            f"{mutator.class_id} produced a no-op on {source_name} — "
+            f"{mutator.class_id} produced a no-op on {source_name} - "
             f"the worst failure available to this module"
         )
     line = source_text[: match.start()].count("\n") + 1

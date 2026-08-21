@@ -1,4 +1,4 @@
-"""CLI: `python -m mutationlab demo` — the whole lab, from clean state, no keys.
+"""CLI: `python -m mutationlab demo` - the whole lab, from clean state, no keys.
 
 Regenerates batches/ (mutants + clean controls + sealed answer key), runs/
 (verdict log), metrics.jsonl, report/scorecard.svg, the inference-compute
@@ -8,7 +8,7 @@ ARE the claims, and the build fails if they stop regenerating.
 
 Every output path is a module-level constant so a test can redirect the whole
 run into a temp tree. A path built inline inside demo() would escape that
-redirection and write into the real repo from a test — which is precisely the
+redirection and write into the real repo from a test - which is precisely the
 kind of quiet side effect this repo exists to catch.
 """
 from __future__ import annotations
@@ -71,7 +71,7 @@ def demo(quiet: bool) -> int:
     if not (FIXTURES_DIR / "catalog.py").exists():
         print(
             "mutationlab demo must run from a source checkout "
-            f"(pip install -e . or PYTHONPATH=src) — fixtures not found at "
+            f"(pip install -e . or PYTHONPATH=src) - fixtures not found at "
             f"{FIXTURES_DIR}",
             file=sys.stderr,
         )
@@ -122,7 +122,7 @@ def demo(quiet: bool) -> int:
 
     low, high = K_VALUES[0], K_VALUES[-1]
     emit(
-        "CURVE: detectable catch k={low}->{high} — independent {a1lo:.4f}->{a1hi:.4f}, "
+        "CURVE: detectable catch k={low}->{high} - independent {a1lo:.4f}->{a1hi:.4f}, "
         "correlated {a2lo:.4f}->{a2hi:.4f} (nothing bought), below-chance "
         "{a3lo:.4f}->{a3hi:.4f} (error amplified); wall {wall} hit(s) everywhere".format(
             low=low,
@@ -139,7 +139,7 @@ def demo(quiet: bool) -> int:
 
     emit("")
     emit("Look around:")
-    emit("  batches/           the reviewable corpus — opaque filenames, no answers in names")
+    emit("  batches/           the reviewable corpus - opaque filenames, no answers in names")
     emit("  runs/              verdicts.md (every HIT / MISS / CLEAN-OK) + answer-key.json (answer-side, kept out of the corpus)")
     emit("  report/scorecard.svg  per-class bars (the red row is the deliberate blind spot)")
     emit("  report/ttc-curve.svg  the k-curve: the win, the placebo, the amplified error, the wall")

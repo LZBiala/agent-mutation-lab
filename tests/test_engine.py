@@ -24,7 +24,7 @@ class TestContract:
     @pytest.mark.parametrize("mutator", MUTATORS, ids=lambda m: m.class_id)
     def test_applies_somewhere_and_refuses_elsewhere(self, mutator) -> None:
         hits = [n for n, text in FIXTURES.items() if applicable(mutator, text)]
-        assert hits, f"{mutator.class_id} applies to no fixture — dead pack entry"
+        assert hits, f"{mutator.class_id} applies to no fixture - dead pack entry"
         for name, text in FIXTURES.items():
             result = apply(mutator, name, text)
             if name in hits:
@@ -75,7 +75,7 @@ class TestContract:
 
 
 class TestMutantsAreBehavioral:
-    """R5.3: showcase classes are REAL bugs — the mutated module misbehaves.
+    """R5.3: showcase classes are REAL bugs - the mutated module misbehaves.
 
     Each probe execs the (self-contained) fixture module text and drives the
     bug: pass on clean, misbehave on mutant.
@@ -84,7 +84,7 @@ class TestMutantsAreBehavioral:
     @staticmethod
     def run_module(text: str) -> dict[str, object]:
         namespace: dict[str, object] = {}
-        exec(compile(text, "<fixture>", "exec"), namespace)  # noqa: S102 — executing our own fixture under test
+        exec(compile(text, "<fixture>", "exec"), namespace)  # noqa: S102 - executing our own fixture under test
         return namespace
 
     def test_mutable_default_shares_state(self) -> None:

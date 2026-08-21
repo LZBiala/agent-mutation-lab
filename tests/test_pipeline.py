@@ -1,6 +1,6 @@
 """End-to-end guarantees: determinism (double run byte-identical), no
 wall-clock in artifacts, keyless imports, hygiene gate, README prose pinned,
-and the in-process demo path (temp copy — never the real tree).
+and the in-process demo path (temp copy - never the real tree).
 """
 from __future__ import annotations
 
@@ -23,7 +23,7 @@ def run_demo(workdir: Path) -> None:
     shutil.copytree(REPO / "src", workdir / "src")
     shutil.copytree(REPO / "fixtures", workdir / "fixtures")
     shutil.copy(REPO / "README.md", workdir / "README.md")
-    result = subprocess.run(  # noqa: S603 — running our own module under test
+    result = subprocess.run(  # noqa: S603 - running our own module under test
         [sys.executable, "-m", "mutationlab", "demo", "--quiet"],
         cwd=workdir,
         env={**os.environ, "PYTHONPATH": str(workdir / "src")},
@@ -146,7 +146,7 @@ class TestInProcessCoverage:
         monkeypatch.setattr(main_mod, "METRICS", tmp_path / "metrics.jsonl")
         # EVERY output constant must be redirected, not most of them: demo()
         # deletes and rewrites each one, so a single unpatched path makes this
-        # test scribble on the real repo's committed artifacts mid-suite — and
+        # test scribble on the real repo's committed artifacts mid-suite - and
         # a later test that reads those artifacts would then be grading this
         # test's output instead of what is committed.
         monkeypatch.setattr(main_mod, "METRICS_TTC", tmp_path / "metrics-ttc.jsonl")
@@ -163,7 +163,7 @@ class TestInProcessCoverage:
 
 class TestHygieneGate:
     def test_repo_passes_its_own_gate(self) -> None:
-        result = subprocess.run(  # noqa: S603 — running our own tool under test
+        result = subprocess.run(  # noqa: S603 - running our own tool under test
             [sys.executable, str(REPO / "tools" / "blocklist_check.py")],
             capture_output=True,
             text=True,

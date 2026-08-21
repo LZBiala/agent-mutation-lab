@@ -1,6 +1,6 @@
 """Catalog module of the fixture app: a tiny town-library book catalog.
 
-This file is CLEAN on purpose — it is a mutation target. Its patterns are
+This file is CLEAN on purpose - it is a mutation target. Its patterns are
 deliberately chosen so specific defect classes can be planted by a one-line
 edit (see the defect pack). Time is logical day numbers, never wall-clock.
 Self-contained: no imports beyond the standard library, no cross-module

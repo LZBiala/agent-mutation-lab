@@ -106,7 +106,7 @@ class TestProbeManifestPinned:
 
     def test_manifest_matches_the_actual_probe_methods(self) -> None:
         # Read the probe class from source text: 'tests' is not a package, so
-        # importing it works locally but not on CI — a text scan is portable.
+        # importing it works locally but not on CI - a text scan is portable.
         source = (REPO / "tests" / "test_engine.py").read_text(encoding="utf-8")
         match = re.search(
             r"class TestMutantsAreBehavioral:.*?(?=\nclass |\Z)", source, flags=re.S

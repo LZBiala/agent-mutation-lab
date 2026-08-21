@@ -1,6 +1,6 @@
 """Reports module of the fixture app: summaries and notice files.
 
-CLEAN on purpose — a mutation target. File writes pin encoding explicitly
+CLEAN on purpose - a mutation target. File writes pin encoding explicitly
 (a platform-default encoding is a real incident class), iteration is sorted
 (deterministic output is a feature), and the overdue-notice rule uses
 explicit parentheses (precedence is a real incident class).
@@ -12,7 +12,7 @@ from pathlib import Path
 
 
 def catalog_summary(catalog: dict[str, dict[str, object]]) -> list[str]:
-    """One line per title, alphabetical — deterministic on purpose."""
+    """One line per title, alphabetical - deterministic on purpose."""
     lines = []
     for title in sorted(catalog):
         entry = catalog[title]

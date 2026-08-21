@@ -6,7 +6,7 @@ Scoring rules (stated here, tested, and printed into the README):
   LINE_TOLERANCE lines of the planted line.
 - MISS: a mutant with no matching finding.
 - FALSE ALARM: any finding at all on a byte-identical clean control file.
-- SPURIOUS: a finding on a mutant that does NOT match the planted defect —
+- SPURIOUS: a finding on a mutant that does NOT match the planted defect -
   counted and published, so noisy reviewers pay a visible price on mutants
   too, not only on the clean arm.
 A reviewer that flags everything maxes false alarms and spurious counts; one
@@ -36,7 +36,7 @@ def match_findings(
 
     HIT semantics live here and ONLY here. The pipeline and the inference-
     compute experiment both score through this function, so a panel of nine
-    reviewers is judged by exactly the rule a single reviewer is judged by —
+    reviewers is judged by exactly the rule a single reviewer is judged by -
     two definitions of "hit" would make the two studies incomparable while
     both looked right.
     """

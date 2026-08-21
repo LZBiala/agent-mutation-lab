@@ -1,5 +1,5 @@
 """The ten PRE-REGISTERED gates of the inference-compute study, as numeric
-assertions — plus the conformance checks that keep the published artifacts
+assertions - plus the conformance checks that keep the published artifacts
 tied to them.
 
 The gates were frozen against the sampling distribution BEFORE the first run.
@@ -78,12 +78,12 @@ def catch(result: ExperimentResult, arm: str, k: int) -> float:
 
 class TestSampleSizeIsDerived:
     """Every gate below is only as good as its denominator, and the denominator
-    must come from the batch — not from prose written when the pack had nine
+    must come from the batch - not from prose written when the pack had nine
     classes."""
 
     def test_the_batch_shape_the_study_assumes(self) -> None:
         assert len(DETECTABLE_ITEMS) == len(MUTANT_ITEMS) - len(WALL_CLASSES)
-        assert WALL_CLASSES, "no rule-less class — the wall exhibit has no subject"
+        assert WALL_CLASSES, "no rule-less class - the wall exhibit has no subject"
 
     def test_reviews_per_point_match_trials_times_items(
         self, result: ExperimentResult
@@ -97,7 +97,7 @@ class TestSampleSizeIsDerived:
 
 
 class TestG1Capability:
-    """G1 — the winning exhibit: more inference compute, more defects caught."""
+    """G1 - the winning exhibit: more inference compute, more defects caught."""
 
     def test_independent_catch_gains_at_least_fifteen_points(
         self, result: ExperimentResult
@@ -107,7 +107,7 @@ class TestG1Capability:
 
 
 class TestG2TheoryMatch:
-    """G2 — the empirical curve must land on the exact binomial tail, in the
+    """G2 - the empirical curve must land on the exact binomial tail, in the
     arm above one-half accuracy AND the arm below it. The small lucky-false-
     alarm inflation is absorbed inside the tolerance a priori; filtering it out
     would mean scoring findings against the answer key."""
@@ -138,7 +138,7 @@ class TestG2TheoryMatch:
 
 
 class TestG3CorrelatedPlacebo:
-    """G3 — the placebo arm, EXACT. Nine seats sharing one stream produce nine
+    """G3 - the placebo arm, EXACT. Nine seats sharing one stream produce nine
     identical ballots, so the majority verdict is that one ballot at every k.
     Any deviation is a bug, not noise: the tolerance is zero."""
 
@@ -165,7 +165,7 @@ class TestG3CorrelatedPlacebo:
 
 
 class TestG4TheWall:
-    """G4 — a rule-less class is invisible to voting, EXACT. The invented-
+    """G4 - a rule-less class is invisible to voting, EXACT. The invented-
     finding pool holds only rule-backed classes, so the wall reads zero by
     construction rather than by luck."""
 
@@ -221,7 +221,7 @@ class TestG5FalseAlarms:
 
 
 class TestG6DiminishingReturns:
-    """G6 — the published LOSES exhibit: the last two seats buy a fraction of
+    """G6 - the published LOSES exhibit: the last two seats buy a fraction of
     what the first two bought, at the same price."""
 
     def test_the_last_step_is_smaller_than_the_first(
@@ -248,12 +248,12 @@ class TestG7Determinism:
 
 @pytest.fixture(scope="module")
 def fresh_demo(tmp_path_factory: pytest.TempPathFactory) -> Path:
-    """A full `demo` run in a temp copy — never the real tree."""
+    """A full `demo` run in a temp copy - never the real tree."""
     workdir = tmp_path_factory.mktemp("ttc_demo")
     shutil.copytree(REPO / "src", workdir / "src")
     shutil.copytree(REPO / "fixtures", workdir / "fixtures")
     shutil.copy(REPO / "README.md", workdir / "README.md")
-    outcome = subprocess.run(  # noqa: S603 — running our own module under test
+    outcome = subprocess.run(  # noqa: S603 - running our own module under test
         [sys.executable, "-m", "mutationlab", "demo", "--quiet"],
         cwd=workdir,
         env={**os.environ, "PYTHONPATH": str(workdir / "src")},
@@ -266,7 +266,7 @@ def fresh_demo(tmp_path_factory: pytest.TempPathFactory) -> Path:
 
 
 class TestG8NoPerturbation:
-    """G8 — the experiment is additive. The v1.0 artifacts must come out of a
+    """G8 - the experiment is additive. The v1.0 artifacts must come out of a
     fresh full run byte-identical to what is committed."""
 
     def test_base_metrics_and_scorecard_are_untouched(self, fresh_demo: Path) -> None:
@@ -286,7 +286,7 @@ class TestG8NoPerturbation:
 
 
 class TestG9Budget:
-    """G9 — a soft budget, measured HERE. The package itself never reads a
+    """G9 - a soft budget, measured HERE. The package itself never reads a
     clock; a clock inside the package would put a moving number into a
     drift-gated artifact."""
 
@@ -298,7 +298,7 @@ class TestG9Budget:
 
 
 class TestG10BelowChanceAmplification:
-    """G10 — the honesty exhibit. Compute multiplies whatever competence is
+    """G10 - the honesty exhibit. Compute multiplies whatever competence is
     there; when there is none, it multiplies the absence."""
 
     def test_voting_makes_a_below_chance_panel_worse(
@@ -316,7 +316,7 @@ class TestG10BelowChanceAmplification:
 
 class TestPublishedArtifactsConform:
     """The README block and the curve must be RENDERED from the committed
-    metrics, not typed — the drift gate is what makes the numbers claims."""
+    metrics, not typed - the drift gate is what makes the numbers claims."""
 
     def test_the_readme_block_renders_from_the_committed_metrics(self) -> None:
         readme = (REPO / "README.md").read_text(encoding="utf-8")

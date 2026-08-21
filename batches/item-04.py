@@ -1,6 +1,6 @@
 """Loans module of the fixture app: borrowing, returns, and late fees.
 
-CLEAN on purpose — a mutation target. Days are logical integers (day 1,
+CLEAN on purpose - a mutation target. Days are logical integers (day 1,
 day 2, ...), never calendar dates, so every computation is deterministic.
 Self-contained: stdlib only, no cross-module imports.
 """
