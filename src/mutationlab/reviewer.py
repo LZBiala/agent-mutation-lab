@@ -90,6 +90,13 @@ _RULES: tuple[tuple[str, str, str], ...] = (
 )
 
 
+# The rule table's own class list, DERIVED — never hand-listed. Two consumers
+# depend on it: the blind-spot wall (defect classes MINUS these, so a class
+# that ships without a rule joins the wall automatically), and the noise model
+# (a reviewer can only cry wolf about classes it carries a detector for).
+RULE_CLASSES: frozenset[str] = frozenset(class_id for class_id, _, _ in _RULES)
+
+
 class MockReviewer(Reviewer):
     name = "MockReviewer"
     banner = (
