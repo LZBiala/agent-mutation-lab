@@ -30,7 +30,7 @@ the whole thing replays byte-identically in CI.
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 from mutationlab.batch import BatchItem, build_batch
@@ -79,7 +79,12 @@ def wall_classes() -> tuple[str, ...]:
 
 @dataclass(frozen=True)
 class CurvePoint:
-    """One published (arm, k) point: catch, false alarms, spurious findings."""
+    """One published (arm, k) point: catch, false alarms, spurious findings.
+
+    Every rate ships with its denominator. `overall_reviews` is that
+    denominator twice over — one review of every mutant per trial — so it
+    divides both `overall_catch` and `spurious_per_mutant_review`.
+    """
 
     arm: str
     k: int
@@ -94,7 +99,6 @@ class CurvePoint:
     clean_reviews: int
     false_alarms: int
     fa_per_clean_review: float
-    mutant_reviews: int
     spurious: int
     spurious_per_mutant_review: float
 
@@ -114,7 +118,6 @@ class CurvePoint:
             "clean_reviews": self.clean_reviews,
             "false_alarms": self.false_alarms,
             "fa_per_clean_review": round(self.fa_per_clean_review, DECIMALS),
-            "mutant_reviews": self.mutant_reviews,
             "spurious": self.spurious,
             "spurious_per_mutant_review": round(
                 self.spurious_per_mutant_review, DECIMALS
@@ -218,8 +221,8 @@ class _Tally:
     clean_reviews: int = 0
     false_alarms: int = 0
     spurious: int = 0
-    wall_reviews: dict[str, int] | None = None
-    wall_hits: dict[str, int] | None = None
+    wall_reviews: dict[str, int] = field(default_factory=dict)
+    wall_hits: dict[str, int] = field(default_factory=dict)
 
 
 def _score_item(
@@ -237,7 +240,6 @@ def _score_item(
     tally.overall_hits += hit
     tally.spurious += len(spurious)
     if item.class_id in wall:
-        assert tally.wall_reviews is not None and tally.wall_hits is not None
         tally.wall_reviews[item.class_id] += 1
         tally.wall_hits[item.class_id] += hit
     else:
@@ -278,7 +280,6 @@ def run_experiment(fixtures: dict[str, str]) -> ExperimentResult:
     for arm in ARMS:
         for k in K_VALUES:
             tally = tallies[(arm, k)]
-            assert tally.wall_reviews is not None and tally.wall_hits is not None
             curve.append(
                 CurvePoint(
                     arm=arm,
@@ -294,7 +295,6 @@ def run_experiment(fixtures: dict[str, str]) -> ExperimentResult:
                     clean_reviews=tally.clean_reviews,
                     false_alarms=tally.false_alarms,
                     fa_per_clean_review=tally.false_alarms / tally.clean_reviews,
-                    mutant_reviews=tally.overall_reviews,
                     spurious=tally.spurious,
                     spurious_per_mutant_review=tally.spurious / tally.overall_reviews,
                 )

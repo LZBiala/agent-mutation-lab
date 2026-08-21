@@ -298,7 +298,7 @@ def render_ttc_table(metrics: TtcMetrics) -> str:
     )
     for k in ks:
         first = metrics.point(arms[0], k)
-        placebo = metrics.point(arms[1], k) if len(arms) > 1 else first
+        placebo = metrics.point(arms[1], k)
         lines.append(
             f"| **{k}** | {_f(first, 'fa_per_clean_review')} | "
             f"{_f(first, 'spurious_per_mutant_review')} | "
@@ -318,6 +318,8 @@ def render_ttc_table(metrics: TtcMetrics) -> str:
             "|---|---|" + "---|" * (len(ks) + 1),
         ]
     )
+    # One table row per (class, arm), with k across the columns. Wall rows
+    # exist at every k, so the first k's rows enumerate the (class, arm) pairs.
     for row in metrics.wall:
         if row["k"] != ks[0]:
             continue

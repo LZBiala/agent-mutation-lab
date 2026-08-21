@@ -70,7 +70,11 @@ class NoisyReviewer(Reviewer):
         rng = random.Random(  # noqa: S311 — a seeded study stream, not a secret
             stream_seed(self.run_seed, self.trial, self.member_index, text)
         )
-        kept = [f for f in self.base.review(source_name, text) if rng.random() >= self.miss_rate]
+        kept = [
+            finding
+            for finding in self.base.review(source_name, text)
+            if rng.random() >= self.miss_rate
+        ]
         if rng.random() < self.fa_rate and self.class_ids:
             kept.append(self._invent(rng, text))
         return kept
