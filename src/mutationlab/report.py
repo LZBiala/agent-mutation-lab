@@ -284,6 +284,26 @@ def render_ttc_table(metrics: TtcMetrics) -> str:
         prediction = _f(metrics.point(arms[0], k), "condorcet")
         lines.append(f"| **{k}** |{cells} {prediction} |")
 
+    # Diminishing returns, DERIVED. This ratio is a measured number, so it is
+    # rendered from the artifact rather than typed into the prose around it —
+    # a hand-typed ratio drifts the moment the batch or the seeds change, and
+    # nothing in CI would catch the contradiction.
+    def catch(arm: str, k: int) -> float:
+        return float(metrics.point(arm, k)["detectable_catch"])  # type: ignore[arg-type]
+
+    first_step = catch(arms[0], ks[1]) - catch(arms[0], ks[0])
+    last_step = catch(arms[0], ks[-1]) - catch(arms[0], ks[-2])
+    lines.extend(
+        [
+            "",
+            f"**Diminishing returns.** The first two extra reviews "
+            f"(k={ks[0]} to k={ks[1]}) buy **{first_step:+.4f}** detectable "
+            f"catch. The last two (k={ks[-2]} to k={ks[-1]}) buy "
+            f"**{last_step:+.4f}** — **{last_step / first_step:.2f}x** the "
+            f"gain, at exactly the same marginal cost of two more reviews.",
+        ]
+    )
+
     lines.extend(
         [
             "",

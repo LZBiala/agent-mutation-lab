@@ -168,6 +168,8 @@ All three of those are measured below.
 | **7** | 0.8678 | 0.7039 | 0.1906 | 0.8740 |
 | **9** | 0.9028 | 0.7039 | 0.1628 | 0.9012 |
 
+**Diminishing returns.** The first two extra reviews (k=1 to k=3) buy **+0.0828** detectable catch. The last two (k=7 to k=9) buy **+0.0350** — **0.42x** the gain, at exactly the same marginal cost of two more reviews.
+
 **The cost — noise the panel pays for.** A false alarm is any finding on a clean control; a spurious finding is one on a mutant that does not match the planted defect.
 
 | reviews per file (k) | A1 false alarms per clean review | A1 spurious per mutant review | A2 false alarms per clean review |
@@ -222,10 +224,12 @@ drives both directions. Above one-half accuracy more seats help; below it,
 more seats hurt. Spending compute on a panel that is wrong more often than
 right makes it more confidently wrong.
 
-**DIMINISHING RETURNS.** The step from k=7 to k=9 buys roughly a third of what
+**DIMINISHING RETURNS.** The step from k=7 to k=9 buys well under half of what
 the step from k=1 to k=3 bought, at exactly the same marginal cost of two more
-reviews. The curve is a tail probability; tails flatten. Any budget argument
-that treats k as linear in value is wrong on the harness's own numbers.
+reviews — the exact ratio is in the table above, derived from the metrics file
+rather than typed here, so it cannot drift away from the numbers it describes.
+The curve is a tail probability; tails flatten. Any budget argument that treats
+k as linear in value is wrong on the harness's own numbers.
 
 ### Reproduce it
 
