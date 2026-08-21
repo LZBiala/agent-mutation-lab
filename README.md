@@ -211,11 +211,14 @@ and a multiplier applied to zero is zero. If your reviewer is blind to a
 failure mode, sampling it nine times buys nine confident silences.
 
 **THE PLACEBO.** Arm A2 gives the panel nine seats sharing one error stream —
-correlated members, the way samples from one model at one temperature are
-correlated. It burns 9x the reviews for a hit count that is *integer-identical*
-to k=1 at every k. Not "a small gain"; the same number, gate-checked at zero
-tolerance. **Independence is the active ingredient, not the count** — and
-independence is exactly what k samples from one model do not have.
+the correlation dial turned all the way to one, the direction samples from a
+single model at a single temperature tend to lean. It burns 9x the reviews for
+a hit count that is *integer-identical* to k=1 at every k. Not "a small gain";
+the same number, gate-checked at zero tolerance. **Independence is the active
+ingredient, not the count** — and independence is exactly what k samples from
+one model cannot be *assumed* to have. A2 is the endpoint, not the forecast:
+real panels land somewhere on the span between this flat line and A1's curve,
+and where they land is an empirical question this harness does not answer.
 
 **THE BELOW-CHANCE ARM.** Arm A3 runs members whose accuracy is 0.35, under
 one half. The curve does not flatten — it **descends**: voting amplifies error
