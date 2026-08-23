@@ -9,7 +9,7 @@ about: Feedback on the interactive walkthrough page
 
 ## What convinced you
 
-<!-- The part (if any) where the mechanism clicked — controls, scoring, the deliberate miss. -->
+<!-- The part (if any) where the mechanism clicked - controls, scoring, the deliberate miss. -->
 
 ## What would you test next
 
