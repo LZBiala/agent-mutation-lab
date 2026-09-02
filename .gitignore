@@ -10,3 +10,4 @@ dist/
 # NOTE: batches/, runs/, report/, and metrics.jsonl are COMMITTED on purpose -
 # they are golden outputs; CI regenerates them and fails the build on any diff.
 .superpowers/
+metrics.sqlite

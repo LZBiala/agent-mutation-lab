@@ -417,3 +417,16 @@ Both items are future work - neither has been run.
 ## License
 
 MIT.
+
+## The numbers, queryable (the SQL receipt)
+
+Every figure this README publishes can also be asked as a query. `tools/sql/load_metrics.py`
+loads the two published metrics files into SQLite (stdlib only, no dependencies, the database
+is generated and never committed), and the `.sql` files beside it ask the questions the prose
+answers: catch rate by class, the deliberate miss, the voting study's lift per arm, false
+alarms as the vote grows. A test asserts every query result against the JSONL it came from,
+so the receipt cannot drift from the numbers it queries.
+
+```
+python tools/sql/load_metrics.py --run
+```
